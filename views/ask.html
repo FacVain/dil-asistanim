@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call /api/query Endpoint</title>
+</head>
+<body>
+    <button onclick="callApiQuery()">Call /api/query</button>
+
+    <script>
+        function callApiQuery() {
+            // Replace 'YOUR_SERVER_URL' with the actual URL of your server
+            const serverUrl = 'http://localhost:1453'; // Replace with your server URL
+
+            // Make an HTTP POST request to the /api/query endpoint
+            fetch(`${serverUrl}/api/query`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                console.log(data);
+                // You can perform further actions based on the response
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

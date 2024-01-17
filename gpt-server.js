@@ -1,32 +1,70 @@
 require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
+const path = require('path')
+require('./routes/auth');
 const axios = require('axios');
-const cookieSession = require('cookie-session');
-require('./passport-setup');
+const session = require('express-session');
+//require('./passport-setup')
+
+// database kurulacak ardından id ve kaç tane negatifle sonuçlanmış kaydedilecek 
 
 const app = express();
-const pool = require('./db'); // PostgreSQL pool setup
+app.use(express.json());
 
-app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
-  keys: [process.env.SESSION_SECRET]
-}));
+app.use(express.static(path.join(__dirname, 'views')));
+
+app.get('/', (req, res) => {
+  res.sendFile('index.html')
+})
+
+app.use(session({
+  secret: 'mysecret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
+}))
+
+function isLoggedIn(req, res, next) {
+  console.log(req.user);
+  req.user ? next() : res.status(401).send('You must be logged in to perform this action');
+}
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
 
-app.get('/auth/google/callback',
+app.get('/getask', isLoggedIn, (req, res) => {
+  console.log('bohohooooooyt')
+  res.sendFile('ask.html')
+})
+
+app.get('/ask', isLoggedIn, (req, res) => {
+  const indexPath = path.join(__dirname, 'views', 'ask.html');
+  res.sendFile(indexPath);
+});
+
+app.get('/auth/google',
+  passport.authenticate('google', { 
+    scope: ['email', 'profile']
+    }
+  )
+);
+
+
+app.get('/api/sessions/oauth/google', 
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
+  function(req, res) {
+    // Successful authentication, redirect home.
     res.redirect('/dashboard');
   });
 
 app.get('/dashboard', isLoggedIn, (req, res) => {
-  res.send(`Welcome ${req.user.display_name}!`);
+  res.send(`Welcome ${req.user.displayName}!`);
+});
+
+app.get('/login', (req, res) => {
+  res.send(`Login failured try again`);
 });
 
 app.post('/api/query', isLoggedIn, async (req, res) => {
@@ -34,10 +72,11 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
 
   try {
     // Save the query to the database
+    /*
     const newQuery = await pool.query(
       'INSERT INTO queries (user_id, query) VALUES ($1, $2) RETURNING *',
       [req.user.id, query]
-    );
+    ); */
 
     // Send the query to OpenAI's API
     const response = await axios.post('https://api.openai.com/v1/engines/gpt-3.5-turbo-1106/completions', {
@@ -57,11 +96,6 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.status(401).send('You must be logged in to perform this action');
-}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
