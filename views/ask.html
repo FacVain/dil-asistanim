@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Call /api/query Endpoint</title>
+    <title>API Query Page</title>
 </head>
 <body>
-    <button onclick="callApiQuery()">Call /api/query</button>
+
+    <h1>API Query Page</h1>
+
+    <label for="inputValue">Enter value:</label>
+    <input type="text" id="inputValue" placeholder="Type something...">
+
+    <button onclick="sendRequest()">Send</button>
+
+    <div id="response"></div>
 
     <script>
-        function callApiQuery() {
-            // Replace 'YOUR_SERVER_URL' with the actual URL of your server
-            const serverUrl = 'http://localhost:1453'; // Replace with your server URL
+        function sendRequest() {
+            // Get the value from the input box
+            var inputValue = document.getElementById("inputValue").value;
 
-            // Make an HTTP POST request to the /api/query endpoint
-            fetch(`${serverUrl}/api/query`, {
-                method: 'POST',
+            // Make a request to the /api/query endpoint
+            fetch('/api/query', {
+                method: 'POST', // You can adjust the method based on your API requirements
                 headers: {
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'application/json', // Set the content type accordingly
+                },
+                body: JSON.stringify({ value: inputValue }),
             })
             .then(response => response.json())
             .then(data => {
-                // Handle the response from the server
-                console.log(data);
-                // You can perform further actions based on the response
+                // Display the response on the page
+                document.getElementById("response").innerHTML = `<p>Response: ${JSON.stringify(data)}</p>`;
             })
             .catch(error => {
                 console.error('Error:', error);
+                // Display an error message on the page if there's an issue with the request
+                document.getElementById("response").innerHTML = `<p>Error: ${error.message}</p>`;
             });
         }
     </script>
+
 </body>
 </html>

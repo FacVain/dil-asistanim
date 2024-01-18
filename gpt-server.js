@@ -7,6 +7,12 @@ const axios = require('axios');
 const session = require('express-session');
 //require('./passport-setup')
 
+const { OpenAI } = require('openai');
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });  
+
 // database kurulacak ardından id ve kaç tane negatifle sonuçlanmış kaydedilecek 
 
 const app = express();
@@ -68,7 +74,7 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/api/query', isLoggedIn, async (req, res) => {
-  const query = req.body.query;
+  const query = req.body.value;
 
   try {
     // Save the query to the database
@@ -79,18 +85,23 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     ); */
 
     // Send the query to OpenAI's API
-    const response = await axios.post('https://api.openai.com/v1/engines/gpt-3.5-turbo-1106/completions', {
-      prompt: query,
-      max_tokens: 150
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
-      }
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          "role": "user",
+          "content": query
+        }
+      ],
+      temperature: 1,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
     });
 
     // Send response back to client
-    res.json({ query: newQuery.rows[0], response: response.data.choices[0].text.trim() });
+    res.json({ response: response.choices[0].message.content });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
