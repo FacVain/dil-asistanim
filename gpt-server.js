@@ -26,7 +26,8 @@ app.use(session({
 }))
 
 function isLoggedIn(req, res, next) {
-  console.log(req.user);
+  if (req.user)
+    console.log("in isLoggedIn: ", req.user);
   req.user ? next() : res.status(401).send('You must be logged in to perform this action');
 }
 
@@ -35,7 +36,6 @@ app.use(passport.session());
 
 
 app.get('/getask', isLoggedIn, (req, res) => {
-  console.log('bohohooooooyt')
   res.sendFile('ask.html')
 })
 
@@ -60,7 +60,7 @@ app.get('/api/sessions/oauth/google',
   });
 
 app.get('/dashboard', isLoggedIn, (req, res) => {
-  res.send(`Welcome ${req.user.displayName}!`);
+  res.send(`Welcome ${req.user.display_name}!`);
 });
 
 app.get('/login', (req, res) => {
