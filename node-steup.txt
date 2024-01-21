@@ -1,2 +1,0 @@
-npm init -y
-npm install express pg dotenv axios passport passport-google-oauth20 cookie-session

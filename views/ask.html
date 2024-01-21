@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Query Page</title>
+</head>
+<body>
+
+    <h1>API Query Page</h1>
+
+    <label for="inputValue">Enter value:</label>
+    <input type="text" id="inputValue" placeholder="Type something...">
+
+    <button onclick="sendRequest()">Send</button>
+
+    <div id="response"></div>
+
+    <script>
+        function sendRequest() {
+            // Get the value from the input box
+            var inputValue = document.getElementById("inputValue").value;
+
+            // Make a request to the /api/query endpoint
+            fetch('/api/query', {
+                method: 'POST', // You can adjust the method based on your API requirements
+                headers: {
+                    'Content-Type': 'application/json', // Set the content type accordingly
+                },
+                body: JSON.stringify({ value: inputValue }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the response on the page
+                document.getElementById("response").innerHTML = `<p>Response: ${JSON.stringify(data)}</p>`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Display an error message on the page if there's an issue with the request
+                document.getElementById("response").innerHTML = `<p>Error: ${error.message}</p>`;
+            });
+        }
+    </script>
+
+</body>
+</html>
