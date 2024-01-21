@@ -1,22 +1,31 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Button, Checkbox, Form, Input, Divider } from "antd";
 import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
+  // eslint-disable-next-line no-unused-vars
   const { login, error, loading } = useLogin();
-  const navigate = useNavigate();
 
   const onFinish = async (values) => {
     console.log("Login values: ", values);
 
     login(values);
-    navigate("/"); //? Redirect to home page
+  };
+
+  const loginWithGoogle = async () => {
+    fetch("http://localhost:1453/auth/google", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   return (
     <div className="w-full h-full flex justify-center items-center bg-gray-200">
-      <div className="w-[400px] p-4 bg-white border-gray-300 border rounded-md">
+      <div className="min-w-[360px] p-4 bg-white border-gray-300 border rounded-md">
         <Form
           name="normal_login"
           className="login-form"
@@ -68,19 +77,26 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="bg-blue-500"
-              loading={loading}
-            >
+            <Button type="primary" htmlType="submit" loading={loading}>
               Log in
             </Button>
             <p className=" inline-flex px-1">or</p>{" "}
             <a href="/register">register now!</a>
           </Form.Item>
-          <Form.Item className="text-center">
+          {/* <Form.Item className="text-center">
             {error && <p className="text-red-500">{error}</p>}
+          </Form.Item> */}
+          <Divider style={{ color: "black" }} className=" text-gray-500">
+            OR
+          </Divider>
+          <Form.Item>
+            <div
+              className=" p-2 border-solid border border-gray-300 rounded-md font-normal text-base hover:bg-gray-200 cursor-pointer"
+              onClick={loginWithGoogle}
+            >
+              <img src="public\google_icon.svg" className=" w-9"></img> Continue
+              with Google
+            </div>
           </Form.Item>
         </Form>
       </div>

@@ -150,7 +150,7 @@ const Register = () => {
             <Button
               type="primary"
               htmlType="submit"
-              className=" bg-blue-500"
+              className=" "
               loading={loading}
             >
               Register
