@@ -4,11 +4,14 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 // @hooks
 import useLogout from "../../hooks/useLogout";
+import { useState } from "react";
 
 const { TextArea } = Input;
 
 const Home = () => {
   const { logout, error, loading } = useLogout();
+  const [userInput, setUserInput] = useState("");
+  const [GPTOutput, setGPTOutput] = useState("");
 
   const logoutHandler = () => {
     console.log("wtf???");
@@ -25,6 +28,24 @@ const Home = () => {
     });
   };
 
+  const askGPT = () => {
+    console.log("askGPT");
+    fetch("http://localhost:1453/api/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userInput: userInput,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setGPTOutput(data);
+      });
+  };
+
   return (
     <div className="grid p-4 h-full content-start">
       <h1 className=" h-fit text-4xl font-bold text-gray-700 justify-self-center">
@@ -35,15 +56,18 @@ const Home = () => {
           placeholder="This is your Input"
           autoSize
           className="p-6 row-start-1"
+          onChange={(e) => setUserInput(e.target.value)}
         />
-        <Card className=" border-gray-300">This is Chat-GPT output!</Card>
-        <Button type="primary" className="w-fit bg-blue-600">
+        <Card className=" border-gray-300">
+          {GPTOutput ? GPTOutput : "This is Chat-GPT output!"}
+        </Card>
+        <Button type="primary" className="w-fit " onClick={askGPT}>
           Submit
         </Button>
       </div>
       <Button
         type="primary"
-        className="bg-blue-600 w-fit ml-auto mt-auto"
+        className="w-fit ml-auto mt-auto"
         onClick={logoutHandler}
         loading={loading}
       >
