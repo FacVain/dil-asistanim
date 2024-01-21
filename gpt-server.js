@@ -3,6 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const path = require('path')
 require('./routes/auth');
+const sendRequestToGPT = require('./dist/gpt-request.js');
 const axios = require('axios');
 const session = require('express-session');
 //require('./passport-setup')
@@ -85,23 +86,10 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     ); */
 
     // Send the query to OpenAI's API
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          "role": "user",
-          "content": query
-        }
-      ],
-      temperature: 1,
-      max_tokens: 256,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
+    const response = await sendRequestToGPT(query);
 
     // Send response back to client
-    res.json({ response: response.choices[0].message.content });
+    res.json({ response: response });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
