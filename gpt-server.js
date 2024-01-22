@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 })
 
 app.use(session({
-  secret: 'mysecret',
+  secret: 'mysecret', // ToDo güzel bir secret seçelim!!
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
@@ -51,19 +51,6 @@ app.use(
 )
 
 app.use("/auth", authRoute);
-
-app.get('/dashboard', isLoggedIn, (req, res) => {
-  res.send(`Welcome ${req.user.display_name}!`);
-});
-
-app.get('/getask', isLoggedIn, (req, res) => {
-  res.sendFile('ask.html')
-})
-
-app.get('/ask', isLoggedIn, (req, res) => {
-  const indexPath = path.join(__dirname, 'views', 'ask.html');
-  res.sendFile(indexPath);
-});
 
 app.post('/api/query', isLoggedIn, async (req, res) => {
   const query = req.body.userInput;
