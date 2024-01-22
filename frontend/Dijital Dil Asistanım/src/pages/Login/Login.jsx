@@ -12,15 +12,8 @@ const Login = () => {
     login(values);
   };
 
-  const loginWithGoogle = async () => {
-    fetch("http://localhost:1453/auth/google", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+  const loginWithGoogle = () => {
+    window.open("http://localhost:1453/auth/google","_self")
   };
 
   return (
