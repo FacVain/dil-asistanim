@@ -65,12 +65,6 @@ app.get('/ask', isLoggedIn, (req, res) => {
   res.sendFile(indexPath);
 });
 
-app.get('/api/sessions/oauth/google', 
-  passport.authenticate('google', {
-    successRedirect: 'http://localhost:5173', 
-    failureRedirect: '/login' 
-}));
-
 app.post('/api/query', isLoggedIn, async (req, res) => {
   const query = req.body.userInput;
 

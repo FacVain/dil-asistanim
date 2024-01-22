@@ -16,6 +16,7 @@ router.get("/login/failed", (req, res) => {
         success: false,
         message: "failure",
     });
+    res.redirect("http://localhost:5173");
 });
 
 router.get("/logout", (req, res) =>{
@@ -28,5 +29,11 @@ router.get('/google',
     scope: ['email', 'profile']
     })
 );
+
+router.get('/google/callback', 
+  passport.authenticate('google', {
+    successRedirect: 'http://localhost:5173', 
+    failureRedirect: '/login/failed' 
+}));
 
 module.exports = router;
