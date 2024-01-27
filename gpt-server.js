@@ -3,7 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const path = require('path')
 require('./routes/auth');
-const sendRequestToGPT = require('./dist/gpt-request.js');
+const sendRequestToGPT = require('./gpt-request/gpt-request.js');
 const axios = require('axios');
 const session = require('express-session');
 //require('./passport-setup')
