@@ -1,13 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
-const path = require('path')
 require('./passport');
-const axios = require('axios');
 const session = require('express-session');
 const cors = require('cors');
 const authRoute = require("./routes/auth");
-//require('./passport-setup')
 
 const { OpenAI } = require('openai');
 
@@ -20,16 +17,10 @@ const openai = new OpenAI({
 const app = express();
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'views')));
-
-app.get('/', (req, res) => {
-  res.sendFile('index.html')
-})
-
 app.use(session({
-  secret: 'mysecret', // ToDo güzel bir secret seçelim!!
+  secret: 'dilasistanim-secret', // ToDo güzel bir secret seçelim!!
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
 }))
 
