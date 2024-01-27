@@ -1,6 +1,7 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Divider } from "antd";
 import useLogin from "../../hooks/useLogin";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   // eslint-disable-next-line no-unused-vars
@@ -10,17 +11,6 @@ const Login = () => {
     console.log("Login values: ", values);
 
     login(values);
-  };
-
-  const loginWithGoogle = async () => {
-    fetch("http://localhost:1453/auth/google", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
   };
 
   return (
@@ -83,20 +73,20 @@ const Login = () => {
             <p className=" inline-flex px-1">or</p>{" "}
             <a href="/register">register now!</a>
           </Form.Item>
-          {/* <Form.Item className="text-center">
-            {error && <p className="text-red-500">{error}</p>}
-          </Form.Item> */}
           <Divider style={{ color: "black" }} className=" text-gray-500">
             OR
           </Divider>
           <Form.Item>
-            <div
-              className=" p-2 border-solid border border-gray-300 rounded-md font-normal text-base hover:bg-gray-200 cursor-pointer"
-              onClick={loginWithGoogle}
-            >
-              <img src="public\google_icon.svg" className=" w-9"></img> Continue
-              with Google
-            </div>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                login({ authToken: credentialResponse.credential });
+                console.log(credentialResponse);
+              }}
+              onError={(err) => {
+                console.log(err);
+              }}
+              useOneTap
+            />
           </Form.Item>
         </Form>
       </div>

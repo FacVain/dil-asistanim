@@ -1,5 +1,7 @@
 import { useState } from "react";
 import useAuthContext from "./useAuthContext";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const useLogin = () => {
   const [error, setError] = useState(null);
@@ -7,34 +9,38 @@ const useLogin = () => {
 
   const { dispatch } = useAuthContext();
 
-  const login = async ({ username, password }) => {
-    console.log("username", username);
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch("https://dummyjson.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await response.json();
-      console.log("data", data);
-
-      if (!response.ok) {
-        setError(data.message[0].messages[0].message);
-      } else {
-        //save token to local storage
-        localStorage.setItem("user", JSON.stringify(data));
-        //update auth state
-        dispatch({ type: "LOGIN", payload: data });
-      }
-      setLoading(false);
-      return data;
-    } catch (err) {
-      console.log("error", err);
-      setError(err);
-      setLoading(false);
+  const login = async ({ username, password, authToken }) => {
+    if (authToken) {
+      return loginGoogle(authToken);
     }
+
+    setLoading(true);
+
+    await axios
+      .post("https://dummyjson.com/auth/login", { username, password })
+      .then((response) => {
+        console.log(response);
+        localStorage.setItem("user", JSON.stringify(username));
+        dispatch({ type: "LOGIN", payload: username });
+      })
+      .catch((error) => {
+        setError(error);
+      });
+
+    setLoading(false);
+  };
+
+  const loginGoogle = (authToken) => {
+    setLoading(true);
+    const decoded = jwtDecode(authToken);
+    const user = {
+      name: decoded.name,
+      email: decoded.email,
+      picture: decoded.picture,
+    };
+    dispatch({ type: "LOGIN", payload: user });
+    setLoading(false);
+    return;
   };
 
   return { login, error, loading };
