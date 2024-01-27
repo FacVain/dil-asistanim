@@ -8,10 +8,11 @@ import {
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import useAuthContext from "./hooks/useAuthContext";
+import History from "./pages/History/History";
+import { useUser } from "./hooks/useUser";
 
 const App = () => {
-  const { user } = useAuthContext();
+  const user = useUser();
 
   return (
     <div className="w-screen h-screen bg-white ">
@@ -20,6 +21,10 @@ const App = () => {
           <Route
             path="/"
             element={user ? <Home /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/my-history"
+            element={user ? <History /> : <Navigate to="/login" />}
           />
           <Route
             path="/login"

@@ -5,6 +5,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 // @hooks
 import useLogout from "../../hooks/useLogout";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const { TextArea } = Input;
 
@@ -74,6 +75,7 @@ const Home = () => {
       >
         Log out
       </Button>
+      <Link to="my-history">Geçmişe Bak</Link>
       {error && <p className="text-red-500">{error}</p>}
     </div>
   );
