@@ -1,0 +1,50 @@
+@import "variables.css";
+
+.sidebar {
+  background-color: var(--tertiary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
+  padding: var(--medium-padding);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--large-border-radius);
+  margin-left: var(--medium-margin);
+}
+.sidebar-header {
+  font-weight: 800;
+  padding: 5px;
+  font-size: 1.5em;
+}
+
+.sidebar-icon {
+  font-size: larger;
+  padding: var(--small-padding);
+  border-radius: var(--small-border-radius);
+  transition: all 0.2s ease;
+  position: absolute;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+}
+
+.primary {
+  width: 100%;
+  height: fit-content;
+  background-color: var(--tertiary-color);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--secondary-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+}
