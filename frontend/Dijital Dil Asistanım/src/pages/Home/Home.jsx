@@ -43,7 +43,7 @@ const Home = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setGPTOutput(JSON.stringify(data));
+        setGPTOutput(JSON.stringify(data.gptResponse));
       });
   };
 

@@ -7,13 +7,11 @@ const Login = () => {
   const { login, error, loading } = useLogin();
 
   const onFinish = async (values) => {
-    console.log("Login values: ", values);
-
     login(values);
   };
 
-  const loginWithGoogle = () => {
-    window.open("http://localhost:1453/auth/google","_self")
+  const loginWithGoogle = async () => {
+    window.open(`${import.meta.env.VITE_API_URL}/auth/google`, "_self");
   };
 
   return (

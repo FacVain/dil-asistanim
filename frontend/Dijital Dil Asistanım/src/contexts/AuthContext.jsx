@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useEffect, useReducer } from "react";
 
 export const AuthContext = createContext();
@@ -19,13 +20,23 @@ export const AuthProvider = ({ children }) => {
     user: null,
   });
 
-  console.log("AuthProvider state: ", state);
-
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      dispatch({ type: "LOGIN", payload: JSON.parse(user) });
-    }
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/auth/login/success`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        }
+        throw new Error("Authentication has been failed!");
+      })
+      .then((resObject) => {
+        dispatch({ type: "LOGIN", payload: resObject.user });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   return (
