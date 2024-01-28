@@ -2,9 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
 const path = require('path')
-require('./routes/auth');
+require('./passport');
 const axios = require('axios');
 const session = require('express-session');
+const cors = require('cors');
+const authRoute = require("./routes/auth");
 //require('./passport-setup')
 
 const { OpenAI } = require('openai');
@@ -25,7 +27,7 @@ app.get('/', (req, res) => {
 })
 
 app.use(session({
-  secret: 'mysecret',
+  secret: 'mysecret', // ToDo güzel bir secret seçelim!!
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
@@ -40,41 +42,18 @@ function isLoggedIn(req, res, next) {
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true, 
+  })
+)
 
-app.get('/getask', isLoggedIn, (req, res) => {
-  res.sendFile('ask.html')
-})
-
-app.get('/ask', isLoggedIn, (req, res) => {
-  const indexPath = path.join(__dirname, 'views', 'ask.html');
-  res.sendFile(indexPath);
-});
-
-app.get('/auth/google',
-  passport.authenticate('google', { 
-    scope: ['email', 'profile']
-    }
-  )
-);
-
-
-app.get('/api/sessions/oauth/google', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/dashboard');
-  });
-
-app.get('/dashboard', isLoggedIn, (req, res) => {
-  res.send(`Welcome ${req.user.display_name}!`);
-});
-
-app.get('/login', (req, res) => {
-  res.send(`Login failured try again`);
-});
+app.use("/auth", authRoute);
 
 app.post('/api/query', isLoggedIn, async (req, res) => {
-  const query = req.body.value;
+  const query = req.body.userInput;
 
   try {
     // Save the query to the database
@@ -101,7 +80,7 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     });
 
     // Send response back to client
-    res.json({ response: response.choices[0].message.content });
+    res.json({ gptResponse: response.choices[0].message.content });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

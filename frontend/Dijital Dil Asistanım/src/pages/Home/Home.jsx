@@ -32,6 +32,7 @@ const Home = () => {
     console.log("askGPT");
     fetch("http://localhost:1453/api/query", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -42,7 +43,7 @@ const Home = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setGPTOutput(data);
+        setGPTOutput(JSON.stringify(data));
       });
   };
 
