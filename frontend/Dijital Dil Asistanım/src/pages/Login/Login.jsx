@@ -7,20 +7,11 @@ const Login = () => {
   const { login, error, loading } = useLogin();
 
   const onFinish = async (values) => {
-    console.log("Login values: ", values);
-
     login(values);
   };
 
   const loginWithGoogle = async () => {
-    fetch("http://localhost:1453/auth/google", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    window.open(`${import.meta.env.VITE_API_URL}/auth/google`, "_self");
   };
 
   return (
