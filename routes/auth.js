@@ -21,7 +21,6 @@ router.get("/login/failed", (req, res) => {
         success: false,
         message: "failure",
     });
-    res.redirect("http://localhost:5173");
 });
 
 router.get("/logout", (req, res) =>{
@@ -40,9 +39,9 @@ router.get('/google',
     })
 );
 
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://localhost:5173', 
+    successRedirect: process.env.FRONTEND_ORIGIN, 
     failureRedirect: '/login/failed' 
 }));
 
