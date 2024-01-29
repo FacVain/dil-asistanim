@@ -1,29 +1,47 @@
 @import "variables.css";
 
 .sidebar {
-  background-color: var(--tertiary-color);
+  background-color: var(--primary-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.1em;
+  gap: var(--small-gap);
   padding: var(--medium-padding);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--secondary-color);
-  border-radius: var(--large-border-radius);
-  margin-left: var(--medium-margin);
-}
-.sidebar-header {
-  font-weight: 800;
-  padding: 5px;
-  font-size: 1.5em;
+  transition: all 0.3s ease;
 }
 
-.sidebar-icon {
+.sidebar-closed {
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-header {
+  font-weight: 600;
+  padding: 5px;
+  font-size: 1.5em;
+  color: var(--quaternary-color);
+}
+
+.sidebar-close-icon {
   font-size: larger;
+  min-width: 50px;
+  min-height: 50px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: var(--small-padding);
   border-radius: var(--small-border-radius);
   transition: all 0.2s ease;
+  align-self: flex-end;
+  border-radius: 50%;
+  margin-top: 19%;
+  transition: all 0.5s ease;
   position: absolute;
+  color: var(--secondary-color);
 
   &:hover {
     cursor: pointer;
@@ -32,19 +50,65 @@
   }
 }
 
+.sidebar-open-icon{
+  font-size: larger;
+  width: 30px;
+  min-height: 50px;
+  position: fixed;
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--small-border-radius);
+  background-color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 32px;
+  transition: all 0.3s ease;
+  color: #fff;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--primary-color);
+  }
+}
+
 .primary {
   width: 100%;
   height: fit-content;
-  background-color: var(--tertiary-color);
+  background-color: var(--primary-color);
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--secondary-color);
+  border: 1px solid var(--primary-color);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.7s ease;
+  font-weight: 300;
 
   &:hover {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
+    color: #fff;  
+  }
+
+  &:focus {
+    background-color: var(--secondary-color);
     color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   }
 }
+
+.primary-focused{
+  background-color: var(--secondary-color);
+  color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-name{
+  font-size: var(--medium-font-size);
+  font-weight: var(--regular-font-weight);
+  color: var(--quaternary-color);  
+}
+
+.expanded-data{
+  font-size: var(--small-font-size);
+  font-weight: var(--light-font-weight);
+}
+
+

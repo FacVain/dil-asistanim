@@ -1,5 +1,6 @@
+import { useState } from "react";
 import Button from "./Button";
-import { DoubleLeftOutlined } from "@ant-design/icons";
+import { DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
 
 const Sidebar = ({
   width,
@@ -8,19 +9,35 @@ const Sidebar = ({
   components,
   buttonType,
   onClick,
+  expandedData,
 }) => {
+  const [isOpen, setIsOpen] = useState(true);
   return (
-    <div className="sidebar" style={{ width: width, height: height }}>
+    <div
+      className={`sidebar ${!isOpen && " sidebar-closed"}`}
+      style={{ width: width, height: height }}
+    >
       <div className="sidebar-header">{header}</div>
-      {components.map((component) => (
+      {components.map((component, index) => (
         <Button
           key={component}
           type={buttonType}
           onClick={onClick}
           name={component}
+          expandedData={expandedData[index]}
         />
       ))}
-      <DoubleLeftOutlined className="sidebar-icon" />
+      {isOpen ? (
+        <DoubleLeftOutlined
+          className="sidebar-close-icon"
+          onClick={() => setIsOpen((prev) => !prev)}
+        />
+      ) : (
+        <DoubleRightOutlined
+          className="sidebar-open-icon"
+          onClick={() => setIsOpen((prev) => !prev)}
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,18 @@
+@import "variables.css";
+
 .history {
   height: 100vh;
   width: 100vw;
   background-color: #e5edf1;
   display: flex;
   align-items: center;
+  gap: var(--x-large-gap);
+}
+
+.history-writing-wrapper {
+  width: 50%;
+  height: 80%;
+  border-radius: var(--large-border-radius);
+  border: 1px solid #fff;
+  padding: var(--large-padding);
 }

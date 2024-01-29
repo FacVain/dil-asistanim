@@ -5,7 +5,7 @@ import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 
 // fake data
-const writings = [
+let writings = [
   {
     index: 0,
     title: "Anıları Hatırlatma Mektubu",
@@ -30,7 +30,13 @@ const writings = [
 ];
 
 const History = () => {
-  const [currentWritingIndex, setCurrentWritingIndex] = useState(0);
+  const [currentWriting, setCurrentWriting] = useState(writings[0]);
+
+  const selectWritingHandler = (title) => {
+    setCurrentWriting(writings.find((writing) => writing.title === title));
+  };
+
+  writings = [...writings, ...writings, ...writings];
 
   return (
     <div className="history w-screen h-screen ">
@@ -38,10 +44,14 @@ const History = () => {
         header="Geçmiş Yazılarım"
         components={writings.map((writing) => writing.title)}
         width="300px"
-        height="97vh"
+        height="100vh"
         buttonType="primary"
-        onClick={setCurrentWritingIndex}
+        onClick={selectWritingHandler}
+        expandedData={writings.map(
+          (writing) => writing.content.substring(0, 70) + "...",
+        )}
       />
+      <div className="history-writing-wrapper">{currentWriting.content}</div>
     </div>
   );
 };
