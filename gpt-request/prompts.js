@@ -6,25 +6,24 @@ const {
 } =  require("@langchain/core/prompts");
 
 const dilekceSchema = z.object({
-    dilekce: z.array(
+    dilekce:
         z.object({
-            sentiment: z.string().describe('Sentiment analysis of text with values "positif", "negatif", "nötr"'),
-            emotion: z.string().describe('Emotion analysis with emotions "Öfkeli", "Üzgün", "Tedirgin", "Kendinden emin"'),
-            missing_info: z.string().describe('Missing information from user text if following informations does not exists in given text: "Adres bilgisi", "Yazanın ismi", "Tarih", "Arz ederim ile bitirme"'),
-            correction: z.string().describe("Write a better petition from user text by changing its language to more formal one and change negative and poorly written sentences")
-        })
-    )
-    .describe("Outputs of dilekce."),
+            sentimentAnalysis: z.enum(["Pozitif", "Nötr", "Negatif"]).describe('Sentiment analysis of input text'),
+            toneAnalysis: z.enum(["Kızgın", "Korku", "Mutlu", "Sürpriz", "Üzgün"]).describe('Tone analysis of input text.'),
+            missingInformations: z.array(z.enum(["Adres bilgisi", "Yazanın ismi", "Tarih", "Arz ederim ile bitirme"]).describe('List given values that does not exists in input text')),
+            correctionOfUserText: z.string().describe("Better petition from user text"),
+            suggestion: z.string().describe("Suggestions to user on how to write better pettion")
+        }) 
+    .describe("Fields of Petition will be filled from given input text"),
 });
 
 const dilekceprompt = new ChatPromptTemplate({
     promptMessages: [
         SystemMessagePromptTemplate.fromTemplate(
         `
-        Do sentiment analysis with values "positif", "negatif", "nötr".
-        Do emotion analysis with emotions "Öfkeli", "Üzgün", "Tedirgin", "Kendinden emin".
-        Missing information from user text if following informations does not exists in given text: "Adres bilgisi", "Yazanın ismi", "Tarih", "Arz ederim ile bitirme".
-        Write a better petition from user text by changing its language to more formal one and change negative and poorly written sentences.
+        Fill fields of given function according to their descriptions and by extracting information from user text. Return answers in Turkish.
+        Write a better petition from user text to by changing its language to more formal one and change negative and poorly written sentences.
+        Write detailed suggestions to user on how to write better pettion by analysing input text
         `
         ),
         HumanMessagePromptTemplate.fromTemplate("{inputText}"),
@@ -32,4 +31,6 @@ const dilekceprompt = new ChatPromptTemplate({
     inputVariables: ["inputText"],
 });
 
-module.exports = {dilekceSchema, dilekceprompt};
+const dilekceRequired = ["sentimentAnalysis", "toneAnalysis", "missingInformations", "correctionOfUserText", "suggestion"]
+
+module.exports = {dilekceSchema, dilekceprompt, dilekceRequired};

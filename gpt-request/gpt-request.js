@@ -6,9 +6,10 @@ const { JsonOutputFunctionsParser } =  require("langchain/output_parsers");
 const {
     dilekceSchema,
     dilekceprompt,
+    dilekceRequired
 } = require("./prompts");
 
-const llm = new ChatOpenAI({ modelName: "gpt-3.5-turbo-1106", temperature: 0 });
+const llm = new ChatOpenAI({ modelName: process.env.MODEL_NAME, temperature: 0 });
 
 // Binding "function_call" below makes the model always call the specified function.
 // If you want to allow the model to call functions selectively, omit it.
@@ -18,6 +19,7 @@ const functionCallingModel = llm.bind({
       name: "output_formatter",
       description: "Should always be used to properly format output",
       parameters: zodToJsonSchema(dilekceSchema),
+      required: dilekceRequired
     },
   ],
   function_call: { name: "output_formatter" },
