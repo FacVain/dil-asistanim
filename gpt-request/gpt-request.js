@@ -26,9 +26,9 @@ const functionCallingModel = llm.bind({
 const outputParser = new JsonOutputFunctionsParser();
 
 const chain = dilekceprompt.pipe(functionCallingModel).pipe(outputParser);
-async function sendRequestToGPT() {
+async function sendRequestToGPT(query) {
     const response = await chain.invoke({
-        inputText: "Gönderilen üründen hiç memnun kalmadım. Bu firmadan bir daha asla ürün almam. Rezalet bir müşteri hizmetleri var. Lütfen bu ürünü değiştirin.",
+        inputText: query,
       });
       
       return JSON.stringify(response, null, 2);

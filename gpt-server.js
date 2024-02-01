@@ -3,19 +3,11 @@ const express = require('express');
 const passport = require('passport');
 const path = require('path')
 require('./passport');
-const sendRequestToGPT = require('./gpt-request/gpt-request.js');
 const axios = require('axios');
 const session = require('express-session');
 const cors = require('cors');
-const authRoute = require("./routes/auth");
-const sendRequestToGPT = require('./gpt-request/gpt-request.js');
-//require('./passport-setup')
-
-const { OpenAI } = require('openai');
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });  
+const authRoute = require('./routes/auth');
+const sendRequestToGPT = require('./gpt-request/gpt-request');
 
 // database kurulacak ardından id ve kaç tane negatifle sonuçlanmış kaydedilecek 
 
@@ -66,7 +58,7 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     ); */
 
     // Send the query to OpenAI's API
-    const response = await sendRequestToGPT(query);
+    const response = await sendRequestToGPT(query)
 
     // Send response back to client
     res.json({ gptResponse: response });
