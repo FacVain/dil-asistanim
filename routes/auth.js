@@ -8,6 +8,11 @@ router.get("/login/success", (req, res) => {
             message: "successfull",
             user: req.user,
         });
+    } else {
+        res.status(401).json({
+            success: false,
+            message: "failure",
+        });
     }
 });
 
@@ -16,12 +21,16 @@ router.get("/login/failed", (req, res) => {
         success: false,
         message: "failure",
     });
-    res.redirect("http://localhost:5173");
 });
 
 router.get("/logout", (req, res) =>{
-    req.logout();
-    res.redirect("http://localhost:5173");
+    res.clearCookie('connect.sid'); 
+	req.logout(function(err) {
+		if(err) console.log(err);
+		req.session.destroy(function (err) { // destroys the session
+			res.send();
+		});
+	});
 })
 
 router.get('/google',
@@ -30,9 +39,9 @@ router.get('/google',
     })
 );
 
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://localhost:5173', 
+    successRedirect: process.env.FRONTEND_ORIGIN, 
     failureRedirect: '/login/failed' 
 }));
 
