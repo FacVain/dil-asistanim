@@ -6,8 +6,6 @@ const Login = () => {
   const { login, error, loading } = useLogin();
 
   const onFinish = async (values) => {
-    console.log("Login values: ", values);
-
     login(values);
   };
 
