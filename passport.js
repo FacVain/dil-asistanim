@@ -1,17 +1,27 @@
 const passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt')
 const User = require('./models/User'); // Import the User model
 require('dotenv').config();
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
+  async function(username, password, done) {
+    try {
+      const user = await User.findOne({ username: username }).exec();
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      
+      const match = await bcrypt.compare(password, user.hashedPassword);
+      if (!match) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      
       return done(null, user);
-    });
+    } catch (err) {
+      return done(err);
+    }
   }
 ));
 
