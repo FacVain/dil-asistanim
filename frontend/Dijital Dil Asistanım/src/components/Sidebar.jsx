@@ -14,19 +14,21 @@ const Sidebar = ({
   const [isOpen, setIsOpen] = useState(true);
   return (
     <div
-      className={`sidebar ${!isOpen && " sidebar-closed"}`}
       style={{ width: width, height: height }}
+      className={`sidebar${!isOpen ? " sidebar-closed" : ""}`}
     >
       <div className="sidebar-header">{header}</div>
-      {components.map((component, index) => (
-        <Button
-          key={component}
-          type={buttonType}
-          onClick={onClick}
-          name={component}
-          expandedData={expandedData[index]}
-        />
-      ))}
+      <div className="sidebar-body">
+        {components.map((component, index) => (
+          <Button
+            key={component}
+            type={buttonType}
+            onClick={onClick}
+            name={component}
+            expandedData={expandedData[index]}
+          />
+        ))}
+      </div>
       {isOpen ? (
         <DoubleLeftOutlined
           className="sidebar-close-icon"
