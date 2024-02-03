@@ -2,7 +2,7 @@ const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require("bcrypt");
 const { body, validationResult } = require('express-validator');
-const pool = require('../db');
+const User = require('../models/User');
 
 
 router.get("/login/success", (req, res) => {
@@ -43,7 +43,6 @@ router.get('/google/callback',
 router.post("/register", [
     // Validation rules
     body('username', 'Username is required').notEmpty().escape(),
-    body('display_name', 'Display name is required').notEmpty().escape(),
     body('password', 'Password is required').notEmpty().escape(),
     body('password', 'Password must be at least 6 characters').isLength({ min: 6 }),
     // More validation rules can be added as needed
@@ -54,32 +53,39 @@ router.post("/register", [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    let { username, display_name, password} = req.body;
+    let { username, password} = req.body;
 
     console.log({
       username,
-      display_name,
       password
     });
 
-    if (!username || !display_name || !password) {
+    if (!username || !password) {
         return res.status(400).json({message: "Please enter all fields"});
     }
 
     try {
-        // Şifreyi hashle
-        const hashedPassword = await bcrypt.hash(password, 10);
-        // Kullanıcıyı veritabanına ekle
-        const newUser = await pool.query(
-            'INSERT INTO users (username, password_hash, display_name) VALUES ($1, $2, $3) RETURNING *',
-            [username, hashedPassword, display_name] // Kullanıcı adı olarak 'name' kullanıldı, gerektiğinde değiştirilebilir
-        );
-        // Başarılı kayıt
-        res.status(201).json({ user: newUser.rows[0] });
-    } catch (error) {
-        if (error.code === '23505') { // Benzersizlik ihlali (e.g., email already exists)
+        // Check if user already exists
+        const existingUser = await User.findOne({ username: username });
+        if (existingUser) {
             return res.status(409).json({ message: "User already exists." });
         }
+        
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user
+        const newUser = new User({
+            username: username,
+            hashedPassword: hashedPassword
+        });
+
+        // Save the user in the database
+        const savedUser = await newUser.save();
+
+        // Successful registration
+        res.status(201).json({ user: savedUser });
+    } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error." });
     }
