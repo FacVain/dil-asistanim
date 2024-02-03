@@ -1,6 +1,6 @@
 const passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
-const pool = require('./db');
+const User = require('./models/User'); // Import the User model
 require('dotenv').config();
 
 passport.use(new GoogleStrategy({
@@ -10,16 +10,19 @@ passport.use(new GoogleStrategy({
   },
   async function(accessToken, refreshToken, profile, cb) {
     try {
-      let user = await pool.query('SELECT * FROM users WHERE google_id = $1', [profile.id]);
-      if (user.rows.length > 0) {
+      let currentUser = await User.findOne({ googleId: profile.id });
+      if (currentUser) {
         // Existing user
         console.log(`User ${profile.displayName} is existing`);
-        cb(null, user.rows[0]);
+        cb(null, currentUser);
       } else {
         // New user
-        user = await pool.query('INSERT INTO users (google_id, display_name) VALUES ($1, $2) RETURNING *', [profile.id, profile.displayName]);
+        newUser = await User.create({
+          googleId: profile.id,
+          username: profile.displayName
+        });
         console.log(`User ${profile.displayName} is created`);
-        cb(null, user.rows[0]);
+        cb(null, newUser);
       }
     } catch (err) {
       cb(err);
@@ -28,12 +31,29 @@ passport.use(new GoogleStrategy({
   }
 ));
 
+passport.serializeUser((user, done) => {
+  done(null, user.id); // Mongoose automatically creates an _id field for your documents
+});
+
+passport.deserializeUser((id, done) => {
+  try {
+    const user = User.findById(id);
+    done(null, user);
+  }
+  catch (error) {
+    done(error);
+  }
+  
+});
+
 // ToDo database işlemleri gerekecek
+/*
 passport.serializeUser((user, done) => {
   //console.log("serializeUser User: ", user);
   done(null, user.google_id);
 });
-
+*/
+/*
 passport.deserializeUser(async (google_id, done) => {
   try {
     const user = await pool.query('SELECT * FROM users WHERE google_id = $1', [google_id]);
@@ -43,3 +63,6 @@ passport.deserializeUser(async (google_id, done) => {
     done(err);
   }
 });
+*/
+
+
