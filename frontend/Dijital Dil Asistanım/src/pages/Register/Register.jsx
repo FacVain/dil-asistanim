@@ -60,22 +60,6 @@ const Register = () => {
             <h1 className="text-2xl text-center mb-6">Register Page</h1>
           </Form.Item>
           <Form.Item
-            name="email"
-            label="E-mail"
-            rules={[
-              {
-                type: "email",
-                message: "The input is not valid E-mail!",
-              },
-              {
-                required: true,
-                message: "Please input your E-mail!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
             name="username"
             label="Username"
             tooltip="What do you want others to call you?"
