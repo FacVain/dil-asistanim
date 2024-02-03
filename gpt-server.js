@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(session({
   secret: process.env.COOKIE_SECRET, // ToDo güzel bir secret seçelim!!
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
 }))
 

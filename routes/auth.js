@@ -15,6 +15,12 @@ router.get("/login/success", (req, res) => {
     }
 });
 
+router.post('/login', 
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect("http://localhost:5173");
+  });
+
 router.get("/login/failed", (req, res) => {
     res.status(401).json({
         success: false,
