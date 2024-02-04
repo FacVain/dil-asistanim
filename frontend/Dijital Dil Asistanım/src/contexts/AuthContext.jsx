@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useEffect, useReducer } from "react";
 
 export const AuthContext = createContext();
@@ -20,8 +21,6 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
   });
-
-  console.log("AuthProvider state: ", state);
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
