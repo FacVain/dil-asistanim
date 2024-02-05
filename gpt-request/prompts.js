@@ -3,7 +3,7 @@ const {
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
-} =  require("@langchain/core/prompts");
+} = require("@langchain/core/prompts");
 
 const dilekceSchema = z.object({
     sentimentAnalysis: z.enum(["Pozitif", "Nötr", "Negatif"]).describe('Sentiment analysis of input text'),
@@ -14,7 +14,7 @@ const dilekceSchema = z.object({
     suggestion: z.string().describe("Detailed suggestions to user on how to write better petition by analysing input text.")
 });
 
-const dilekceprompt = new ChatPromptTemplate({
+const prompt = new ChatPromptTemplate({
     promptMessages: [
         SystemMessagePromptTemplate.fromTemplate(
         `
@@ -28,4 +28,7 @@ const dilekceprompt = new ChatPromptTemplate({
 
 const dilekceRequired = ["sentimentAnalysis", "toneAnalysis", "missingInformations", "petitionFromUserText", "suggestion"]
 
-module.exports = {dilekceSchema, dilekceprompt, dilekceRequired};
+module.exports = {
+    prompt,
+    dilekceSchema, dilekceRequired
+};

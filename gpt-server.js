@@ -47,8 +47,7 @@ app.use(
 app.use("/auth", authRoute);
 
 app.post('/api/query', isLoggedIn, async (req, res) => {
-  const query = req.body.userInput;
-
+  
   try {
     // Save the query to the database
     /*
@@ -58,7 +57,7 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     ); */
 
     // Send the query to OpenAI's API
-    const response = await sendRequestToGPT(query)
+    const response = await sendRequestToGPT(req)
 
     // Send response back to client
     res.json({ gptResponse: response });
