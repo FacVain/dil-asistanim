@@ -10,7 +10,7 @@ passport.use(new GoogleStrategy({
   },
   async function(accessToken, refreshToken, profile, cb) {
     try {
-      let currentUser = await User.findOne({ googleId: profile.id });
+      let currentUser = await User.findOne({ googleId: profile.id }).exec();
       if (currentUser) {
         // Existing user
         console.log(`User ${profile.displayName} is existing`);

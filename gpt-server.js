@@ -32,8 +32,6 @@ app.use(session({
 }))
 
 function isLoggedIn(req, res, next) {
-  if (req.user)
-    console.log("in isLoggedIn: ", req.user);
   req.user ? next() : res.status(401).send('You must be logged in to perform this action');
 }
 
