@@ -1,12 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
-const path = require('path')
 require('./passport');
-const axios = require('axios');
 const session = require('express-session');
 const cors = require('cors');
-const authRoute = require('./routes/auth');
+const authRoute = require("./routes/auth");
+
+const mongoose = require('mongoose');
+const connectDB =require("./config/dbConn")
+
+connectDB()
+
+console.log(process.env.NODE_ENV);
+
 const sendRequestToGPT = require('./gpt-request/gpt-request');
 
 // database kurulacak ardından id ve kaç tane negatifle sonuçlanmış kaydedilecek 
@@ -14,22 +20,14 @@ const sendRequestToGPT = require('./gpt-request/gpt-request');
 const app = express();
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'views')));
-
-app.get('/', (req, res) => {
-  res.sendFile('index.html')
-})
-
 app.use(session({
-  secret: 'mysecret', // ToDo güzel bir secret seçelim!!
+  secret: process.env.COOKIE_SECRET, // ToDo güzel bir secret seçelim!!
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
 }))
 
 function isLoggedIn(req, res, next) {
-  if (req.user)
-    console.log("in isLoggedIn: ", req.user);
   req.user ? next() : res.status(401).send('You must be logged in to perform this action');
 }
 
@@ -68,6 +66,11 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+
+mongoose.connection.on('open', () => {
+  console.log('connected to mongodb')
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
 });
+

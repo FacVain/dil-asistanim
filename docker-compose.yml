@@ -5,18 +5,18 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: dilasistanimdb
       PGDATA: /data/postgres
     volumes:
       - db:/data/postgres
+      - ./init:/docker-entrypoint-initdb.d # Mount the init directory
     ports:
       - "5433:5432"
     networks:
       - db
     restart: unless-stopped
-
 networks:
   db:
     driver: bridge
-
 volumes:
   db:
