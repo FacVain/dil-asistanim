@@ -3,7 +3,7 @@ const { zodToJsonSchema } = require("zod-to-json-schema");
 
 const {
     commonSchema,
-    dilekceSchema, dilekceRequired,
+    dilekceSchema, dilekceSystemMessage, dilekceRequired,
     serbestRequired
 } = require("./schemas");
 
@@ -20,14 +20,14 @@ function buildPrompt(req){
     let parameters, required, systemMessage;
     switch(req.body.type){
         case "dilekce":
-            systemMessage = "Fill fields of given function according to their descriptions and by extracting information from input text. Return answers in Turkish.";
+            systemMessage = dilekceSystemMessage;
             parameters = zodToJsonSchema(dilekceSchema);
             required = dilekceRequired;
             break;
         case "serbestYazi":
             const serbestSchema = commonSchema.merge(z.object({
                 rewrittenTextFromUserText: z.string().describe(`Rewritten input text in a ${req.body.tone} tone`),
-                suggestion: z.string().describe(`Detailed suggestions to user on how to communicate more effectively and in a ${req.body.tone} tone by analysing input text.`)
+                suggestionForUserText: z.string().describe(`Detailed suggestions to user on how to communicate more effectively and in a ${req.body.tone} tone by analysing input text.`)
             }));
             systemMessage = `Fill fields of given function according to their descriptions and by extracting information from input text. Return answers in Turkish.
             Rewrite input text in a ${req.body.tone} tone and replace negative and poorly written sentences so the user can communicate more effectively
