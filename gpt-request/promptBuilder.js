@@ -15,8 +15,7 @@ const {
 
 function buildPrompt(req){
     
-    req.body.type = "dilekce"
-    req.body.tone = "Mutlu"
+
     let parameters, required, systemMessage;
     switch(req.body.type){
         case "dilekce":

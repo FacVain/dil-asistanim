@@ -45,7 +45,9 @@ router.get("/login/success", (req, res) => {
                 error: loginErr.message,
               });
             }
-      
+            
+            req.session.userId = user._id;
+
             return res.status(200).json({
               success: true,
               message: 'Successfully logged in',
