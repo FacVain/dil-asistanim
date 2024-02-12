@@ -13,11 +13,7 @@ connectDB()
 
 console.log(process.env.NODE_ENV);
 
-const { OpenAI } = require('openai');
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });  
+const sendRequestToGPT = require('./gpt-request/gpt-request');
 
 // database kurulacak ardından id ve kaç tane negatifle sonuçlanmış kaydedilecek 
 
@@ -32,8 +28,6 @@ app.use(session({
 }))
 
 function isLoggedIn(req, res, next) {
-  if (req.user)
-    console.log("in isLoggedIn: ", req.user);
   req.user ? next() : res.status(401).send('You must be logged in to perform this action');
 }
 
@@ -42,7 +36,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_ORIGIN,
     methods: "GET,POST,PUT,DELETE",
     credentials: true, 
   })
@@ -51,8 +45,7 @@ app.use(
 app.use("/auth", authRoute);
 
 app.post('/api/query', isLoggedIn, async (req, res) => {
-  const query = req.body.userInput;
-
+  
   try {
     // Save the query to the database
     /*
@@ -62,23 +55,10 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     ); */
 
     // Send the query to OpenAI's API
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          "role": "user",
-          "content": query
-        }
-      ],
-      temperature: 1,
-      max_tokens: 256,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
+    const response = await sendRequestToGPT(req)
 
     // Send response back to client
-    res.json({ gptResponse: response.choices[0].message.content });
+    res.json({ gptResponse: response });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
