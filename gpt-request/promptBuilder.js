@@ -1,28 +1,23 @@
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
+const { ChatPromptTemplate } = require("@langchain/core/prompts");
 
 const {
-    commonSchema,
-    dilekceSchema, dilekceSystemMessage, dilekceRequired,
-    serbestRequired
+    commonSchema, commonSystemMessage,
+    dilekceSchema,
+    academicMailSchema, businessMailSchema,
 } = require("./schemas");
 
-const {
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-} = require("@langchain/core/prompts");
 
 function buildPrompt(req){
     
-    req.body.type = "dilekce"
+    req.body.type = "mail"
+    req.body.mailType = "academic"
     req.body.tone = "Mutlu"
-    let parameters, required, systemMessage;
+    let schema, systemMessage = commonSystemMessage;
     switch(req.body.type){
         case "dilekce":
-            systemMessage = dilekceSystemMessage;
-            parameters = zodToJsonSchema(dilekceSchema);
-            required = dilekceRequired;
+            schema = zodToJsonSchema(dilekceSchema);
             break;
         case "serbestYazi":
             const serbestSchema = commonSchema.merge(z.object({
@@ -32,32 +27,21 @@ function buildPrompt(req){
             systemMessage = `Fill fields of given function according to their descriptions and by extracting information from input text. Return answers in Turkish.
             Rewrite input text in a ${req.body.tone} tone and replace negative and poorly written sentences so the user can communicate more effectively
             Detailed suggestions to user on how to communicate more effectively and in a ${req.body.tone} tone by analysing input text.`;
-            parameters = zodToJsonSchema(serbestSchema);
-            required = serbestRequired;
+            schema = zodToJsonSchema(serbestSchema);
+            break;
+        case "mail":
+            if(req.body.mailType === "academic")
+                schema = zodToJsonSchema(academicMailSchema);
+            else if(req.body.mailType === "business")
+                schema = zodToJsonSchema(businessMailSchema);
             break;
     }
-
-    const gptFunction = {
-        functions: [
-          {
-            name: "output_formatter",
-            description: "Should always be used to properly format output",
-            parameters: parameters,
-            required: required
-          },
-        ],
-        function_call: { name: "output_formatter" },
-    };
     
-    const prompt = new ChatPromptTemplate({
-        promptMessages: [
-            SystemMessagePromptTemplate.fromTemplate(systemMessage),
-            HumanMessagePromptTemplate.fromTemplate("{inputText}"),
-        ],
-        inputVariables: ["inputText"],
-    });
-
-    return [gptFunction, prompt];
+    const prompt = ChatPromptTemplate.fromMessages([
+            ["system", systemMessage],
+            ["human", "{inputText}"]
+        ]);
+    return [prompt, schema];
 }
 
 module.exports = buildPrompt;
