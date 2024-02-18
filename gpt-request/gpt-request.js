@@ -1,18 +1,23 @@
 const { ChatOpenAI } = require("@langchain/openai");
 const { JsonOutputFunctionsParser } = require("langchain/output_parsers");
+const { createStructuredOutputRunnable } =  require("langchain/chains/openai_functions");
 const buildPrompt = require("./promptBuilder");
 
-const llm = new ChatOpenAI({ modelName: process.env.MODEL_NAME, temperature: 0 });
+const model = new ChatOpenAI({ modelName: process.env.MODEL_NAME, temperature: 0 });
 
 async function sendRequestToGPT(req) {
-  // Binding "function_call" below makes the model always call the specified function.
-  const [gptFunction, prompt] = buildPrompt(req);
-  const functionCallingModel = llm.bind(gptFunction);
+  const [prompt, schema] = buildPrompt(req);
 
   const outputParser = new JsonOutputFunctionsParser();
-  const chain = prompt.pipe(functionCallingModel).pipe(outputParser);
 
-  const response = await chain.invoke({
+  const runnable = createStructuredOutputRunnable({
+    outputSchema: schema,
+    llm: model,
+    prompt,
+    outputParser
+  });
+
+  const response = await runnable.invoke({
       inputText: req.body.userInput,
     });
     
