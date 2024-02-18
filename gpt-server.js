@@ -14,6 +14,7 @@ connectDB()
 console.log(process.env.NODE_ENV);
 
 const sendRequestToGPT = require('./gpt-request/gpt-request');
+const sendRequestToXMLRoBERTa = require('./xmlroberta-request/roberta-request');
 
 // database kurulacak ardından id ve kaç tane negatifle sonuçlanmış kaydedilecek 
 
@@ -55,10 +56,11 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     ); */
 
     // Send the query to OpenAI's API
-    const response = await sendRequestToGPT(req)
+    const gptResponse = await sendRequestToGPT(req);
+    const robertaResponse = await sendRequestToXMLRoBERTa(req);
 
     // Send response back to client
-    res.json({ gptResponse: response });
+    res.json({ robertaResponse: robertaResponse, gptResponse: gptResponse });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

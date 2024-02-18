@@ -21,7 +21,7 @@ def is_alive():
 def predict():
     print("/predict request")
     req_json = request.get_json()
-    encoded_input = tokenizer(req_json["text"], truncation=True, padding='max_length', max_length=256, return_tensors='pt')
+    encoded_input = tokenizer(req_json["userInput"], truncation=True, padding='max_length', max_length=256, return_tensors='pt')
 
     sentiment = sentiment_model(**encoded_input)
     sent_scores = sentiment[0][0].detach().numpy()
@@ -42,4 +42,4 @@ def predict():
     })
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080)

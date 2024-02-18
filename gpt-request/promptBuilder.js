@@ -11,7 +11,7 @@ const {
 
 function buildPrompt(req){
     
-    req.body.type = "mail"
+    req.body.type = "dilekce"
     req.body.mailType = "academic"
     req.body.tone = "Mutlu"
     let schema, systemMessage = commonSystemMessage;
