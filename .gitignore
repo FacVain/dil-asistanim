@@ -90,3 +90,7 @@ dist/
 
 # Serverless directories
 .serverless/
+
+# Transformers model files
+fine-tune/xmlroberta-fine-tune/logs/*
+fine-tune/xmlroberta-fine-tune/results/*
