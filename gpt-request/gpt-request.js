@@ -21,6 +21,7 @@ async function sendRequestToGPT(req) {
       inputText: req.body.userInput,
     });
     
+  console.log("Cevap: ", response)
   return response;
 }
 

@@ -3,14 +3,19 @@ const Schema = mongoose.Schema;
 
 const { ToneEnum } = require("../config/constants");
 
-const petitionAnalysisSchema = new Schema({
+const mailAnalysisSchema = new Schema({
   type: {
     type: String,
     required: true,
-    default: "dilekce"
+    default: "mail"
   },
   userInput: {
     type: String,
+    required: true
+  },
+  mailType: {
+    type: String,
+    enum: ['academic', 'business'],
     required: true
   },
   sentimentAnalysis: {
@@ -26,14 +31,7 @@ const petitionAnalysisSchema = new Schema({
     validate: [toneArrayLimit, '{PATH} exceeds the limit of 3'], // Custom validator
     required: true
   },
-  missingInformationsInUserText: {
-    type: [{
-      type: String,
-      enum: ['Başvurulan Makamın Adı', 'Ad, Soyad', 'Tarih', 'Adres', 'Arz ederim ile bitirme']
-    }],
-    default: []
-  },
-  improvedPetitionFromUserText: {
+  improvedMailFromUserText: {
     type: String,
     required: true
   },
@@ -54,6 +52,6 @@ function toneArrayLimit(val) {
   return val.length <= 3;
 }
 
-const PetitionAnalysis = mongoose.model('PetitionAnalysis', petitionAnalysisSchema);
+const MailAnalysis = mongoose.model('MailAnalysis', mailAnalysisSchema);
 
-module.exports = PetitionAnalysis;
+module.exports = MailAnalysis;

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const { ToneEnum } = require("../config/constants");
+
 const FreeTextAnalysisSchema = new Schema({
   type: {
     type: String,
@@ -23,7 +25,7 @@ const FreeTextAnalysisSchema = new Schema({
   toneAnalysis: {
     type: [{
         type: String,
-        enum: ["Kızgın", "Korku", "Mutlu", "Sürpriz", "Üzgün", "Resmi", "Gayri Resmi", "İyimser", "Endişeli", "Samimi", "Meraklı", "İddialı"]
+        enum: ToneEnum
     }],
     validate: [toneArrayLimit, '{PATH} exceeds the limit of 3'], // Custom validator
     required: true

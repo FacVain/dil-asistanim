@@ -1,9 +1,9 @@
 const { z } = require("zod");
+const { ToneEnum } = require("../config/constants");
 
 commonSchema = z.object({
     sentimentAnalysis: z.enum(["Pozitif", "Nötr", "Negatif"]).describe('Sentiment analysis of input text'),
-    toneAnalysis: z.array(z.enum(["Kızgın", "Korku", "Mutlu", "Sürpriz", "Üzgün", "Resmi", "Gayri Resmi", "İyimser", "Endişeli", "Samimi", "Meraklı", "İddialı",  
-                                  "Teşvik Edici", "İşbirliği"])).length(3).describe('Tone analysis of input text. Return top 3 tones.'),
+    toneAnalysis: z.array(z.enum(ToneEnum)).length(3).describe('Tone analysis of input text. Return top 3 tones.'),
 });
 
 const commonSystemMessage = `Fill fields of given function according to their descriptions and by extracting information from input text. You must return your answers in Turkish.`

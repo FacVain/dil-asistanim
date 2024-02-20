@@ -5,8 +5,10 @@ require('./passport');
 const session = require('express-session');
 const cors = require('cors');
 const authRoute = require("./routes/auth");
+const historyRoute = require("./routes/history");
 
-const FreeTextAnalysis = require("./models/SerbestYazi")
+
+const getModelByType = require('./models/ModelFactory')
 
 const mongoose = require('mongoose');
 const connectDB =require("./config/dbConn")
@@ -15,9 +17,9 @@ connectDB()
 
 console.log(process.env.NODE_ENV);
 
-const sendRequestToGPT = require('./gpt-request/gpt-request');
+const { isLoggedIn } = require('./middlewares/authMiddleware')
 
-// database kurulacak ardından id ve kaç tane negatifle sonuçlanmış kaydedilecek 
+const sendRequestToGPT = require('./gpt-request/gpt-request');
 
 const app = express();
 app.use(express.json());
@@ -28,20 +30,6 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
 }))
-
-/*
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.status(401).send('You must be logged in to perform this action');
-}
-*/
-
-function isLoggedIn(req, res, next) {
-  if (req.session && req.session.userId) {
-    return next(); // User is logged in, continue to the next middleware/route handler
-  } else {
-    res.status(401).send('You are not logged in.');
-  }
-}
 
 
 app.use(passport.initialize());
@@ -56,6 +44,8 @@ app.use(
 )
 
 app.use("/auth", authRoute);
+app.use("/history", historyRoute);
+
 
 app.post('/api/query', isLoggedIn, async (req, res) => {
   
@@ -73,9 +63,11 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
       user: userId // Add the user's ID as a foreign key reference
     };
 
+    // Determine the correct model based on the input type
+    const AnalysisModel = getModelByType(req.body.type);
 
-    // Create a new document from the merged data
-    const newTextAnalysis = new FreeTextAnalysis(documentData);
+    // Create a new document using the dynamic model
+    const newTextAnalysis = new AnalysisModel(documentData);
 
     // Save the document to the database
     const savedDocument = await newTextAnalysis.save();
