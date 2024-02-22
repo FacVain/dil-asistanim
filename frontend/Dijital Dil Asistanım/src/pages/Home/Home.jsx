@@ -6,6 +6,8 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import useLogout from "../../hooks/useLogout";
 import { useState } from "react";
 
+import { Link } from "react-router-dom";
+
 const { TextArea } = Input;
 
 const Home = () => {
@@ -43,7 +45,7 @@ const Home = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setGPTOutput(JSON.stringify(data));
+        setGPTOutput(JSON.stringify(data.gptResponse));
       });
   };
 
@@ -66,6 +68,7 @@ const Home = () => {
           Submit
         </Button>
       </div>
+      <Link to="/history">Go to History</Link>
       <Button
         type="primary"
         className="w-fit ml-auto mt-auto"

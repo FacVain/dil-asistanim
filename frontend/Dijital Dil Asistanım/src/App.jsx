@@ -9,6 +9,8 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import useAuthContext from "./hooks/useAuthContext";
+import History from "./pages/History/History";
+import HistoryDetailed from "./pages/History/HistoryDetailed";
 
 const App = () => {
   const { user } = useAuthContext();
@@ -28,6 +30,14 @@ const App = () => {
           <Route
             path="/register"
             element={!user ? <Register /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/history"
+            element={true ? <History /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/history/:id"
+            element={true ? <HistoryDetailed /> : <Navigate to="/login" />}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

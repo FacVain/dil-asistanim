@@ -1,14 +1,20 @@
+import axios from "axios";
 import useAuthContext from "./useAuthContext";
 
 const useLogout = () => {
   const { dispatch } = useAuthContext();
 
   const logout = () => {
-    //remove user from local storage
-    localStorage.removeItem("user");
-
-    //update auth state
-    dispatch({ type: "LOGOUT" });
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        dispatch({ type: "LOGOUT" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return { logout };
