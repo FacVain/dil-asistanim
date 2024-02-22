@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAuthContext from "./useAuthContext";
+import axios from "axios";
 
 const useLogin = () => {
   const [error, setError] = useState(null);
@@ -12,24 +13,22 @@ const useLogin = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch("https://dummyjson.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await response.json();
-      console.log("data", data);
+      await axios
+        .post(`${import.meta.env.VITE_API_URL}/auth/login`, {
+          username,
+          password,
+        })
+        .then((response) => {
+          console.log(response);
 
-      if (!response.ok) {
-        setError(data.message[0].messages[0].message);
-      } else {
-        //save token to local storage
-        localStorage.setItem("user", JSON.stringify(data));
-        //update auth state
-        dispatch({ type: "LOGIN", payload: data });
-      }
+          dispatch({ type: "LOGIN", payload: response.data.userInfo });
+          return response.data;
+        })
+        .catch((err) => {
+          setError(err.response.data.message);
+        });
+
       setLoading(false);
-      return data;
     } catch (err) {
       console.log("error", err);
       setError(err);
