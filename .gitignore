@@ -91,7 +91,13 @@ out/
 # Serverless directories
 .serverless/
 
+# Finetuned model files
+fine-tune/xmlroberta-fine-tune/results/*
+fine-tune/xmlroberta-fine-tune/logs/*
+
 # XMLRoBERTa model files
-fine-tune/xmlroberta-fine-tune/*
 xmlroberta-request/sentiment_model/*
 xmlroberta-request/tone_model/*
+
+#Test request file
+gpt-request2/*

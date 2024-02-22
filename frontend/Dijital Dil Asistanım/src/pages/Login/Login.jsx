@@ -3,14 +3,13 @@ import { Button, Checkbox, Form, Input, Divider } from "antd";
 import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
-  // eslint-disable-next-line no-unused-vars
   const { login, error, loading } = useLogin();
 
   const onFinish = async (values) => {
     login(values);
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = () => {
     window.open(`${import.meta.env.VITE_API_URL}/auth/google`, "_self");
   };
 
@@ -74,9 +73,9 @@ const Login = () => {
             <p className=" inline-flex px-1">or</p>{" "}
             <a href="/register">register now!</a>
           </Form.Item>
-          {/* <Form.Item className="text-center">
+          <Form.Item className="text-center">
             {error && <p className="text-red-500">{error}</p>}
-          </Form.Item> */}
+          </Form.Item>
           <Divider style={{ color: "black" }} className=" text-gray-500">
             OR
           </Divider>

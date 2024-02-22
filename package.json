@@ -22,11 +22,13 @@
     "openai": "^4.24.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
     "pg": "^8.11.3",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.4"
   },
   "devDependencies": {
+    "nodemon": "^3.0.3",
     "typescript": "^5.3.3"
   }
 }

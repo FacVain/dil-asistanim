@@ -20,6 +20,43 @@ router.get("/login/success", (req, res) => {
     }
 });
 
+    router.post('/login', (req, res, next) => {
+        passport.authenticate('local', (err, user, info) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: 'Internal Server Error',
+              error: err.message,
+            });
+          }
+      
+          if (!user) {
+            return res.status(401).json({
+              success: false,
+              message: info.message || 'Authentication failed.',
+            });
+          }
+      
+          req.logIn(user, (loginErr) => {
+            if (loginErr) {
+              return res.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                error: loginErr.message,
+              });
+            }
+            
+            req.session.userId = user._id;
+
+            return res.status(200).json({
+              success: true,
+              message: 'Successfully logged in',
+              userInfo: {username: user.username, id: user._id},
+            });
+          });
+        })(req, res, next);
+      });
+
 router.get("/login/failed", (req, res) => {
     res.status(401).json({
         success: false,

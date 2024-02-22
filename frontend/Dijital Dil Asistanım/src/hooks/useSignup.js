@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAuthContext from "./useAuthContext";
+import axios from "axios";
 
 const useSignup = () => {
   const [error, setError] = useState(null);
@@ -7,34 +8,35 @@ const useSignup = () => {
 
   const { dispatch } = useAuthContext();
 
-  const signup = async ({ email, username, password }) => {
+  const signup = async ({ username, password }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(
-        "http://localhost:1337/auth/local/register",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
-        },
-      );
-      const data = await response.json();
-      console.log("data", data);
-
-      if (!response.ok) {
-        setError(data.error);
-      } else {
-        //save token to local storage
-
-        //update auth state
-        dispatch({ type: "LOGIN", payload: data });
-      }
-      setLoading(false);
-      return data;
+      await axios
+        .post(`${import.meta.env.VITE_API_URL}/auth/register`, {
+          username,
+          password,
+        })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: "LOGIN", payload: response.data });
+          return response.data;
+        })
+        .catch((err) => {
+          if (err.response.data.errors) {
+            let errors = "";
+            err.response.data.errors.forEach((error) => {
+              errors += error.msg + " ";
+            });
+            setError(errors);
+          } else {
+            setError(err.response.data.message);
+          }
+        });
     } catch (err) {
-      console.log("error", err);
       setError(err);
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
