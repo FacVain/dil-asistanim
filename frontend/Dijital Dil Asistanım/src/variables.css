@@ -6,6 +6,8 @@
   --quaternary-color: #112D4E;
   --border-color: #2a2b61;
   /* FONTS */
+  --primary-font: 'Poppins', sans-serif;
+
   /* FONT-SIZE */
   --small-font-size: 0.8em;
   --medium-font-size: 1em;
