@@ -2,52 +2,92 @@ import "./history.css";
 
 // @hooks
 import Card from "../../components/Card";
-import writings from "./data";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
-// import axios from "axios";
+
+import axios from "axios";
+import { textTypes, textTypesEnum } from "../../assets/textTypes";
+import { Checkbox } from "../../components/CheckBox";
+import { useState } from "react";
+import LoadingBox from "../../components/LoadingBox";
+
 
 const History = () => {
   const navigate = useNavigate();
+  const [checkedType, setCheckedType] = useState("");
+  const [texts, setTexts] = useState([]);
+  const [isTextFound, setIsTextFound] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    e.stopPropagation();
+    setCheckedType(checkedType === e.target.id ? "" : e.target.id);
+  };
 
   const selectWritingHandler = (id) => {
     navigate(`/history/${id}`);
   };
 
   const getHistory = async () => {
-    // axios
-    //   .get(`${import.meta.env.VITE_API_URL}/history/freetexts`, {
-    //     withCredentials: true,
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //   });
-    await fetch("http://localhost:1453/history/freetexts", {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+    if (!checkedType) {
+      alert("Lütfen bir yazı türü seçiniz.");
+      return;
+    }
+
+    setIsTextFound(true);
+    setIsLoading(true);
+
+    axios
+      .get(
+        `${import.meta.env.VITE_API_URL}/history/${textTypesEnum[checkedType]}`,
+        {
+          withCredentials: true,
+        },
+      )
+      .then((response) => {
+        setTexts(response.data.userHistory);
+        response.data.userHistory.length == 0 ? setIsTextFound(false) : null;
+        setIsLoading(false);
       });
   };
 
   return (
     <div className="history">
-      {/* <div className="history-writing-wrapper">{currentWriting.content}</div> */}
-      <div className="card-wrapper">
-        {writings.map((writing) => (
-          <Card
-            key={writing.title}
-            title={writing.title}
-            // content={writing.content.substring(0, 160)}
-            onClick={() => selectWritingHandler(writing.id)}
+      <div className="page-title">Geçmiş Yazılarım</div>
+      <div className="select-type">
+        {textTypes.map((type) => (
+          <Checkbox
+            key={type}
+            label={type}
+            value={checkedType === type}
+            onChange={handleChange}
           />
         ))}
         <Button onClick={getHistory} name="Fetch History" />
+      </div>
+      <Button onClick={getHistory} name="Geçmişi Göster" />
+      <div className="card-wrapper">
+        {texts.length !== 0 ? (
+          texts.map((text) => (
+            <Card
+              key={text._id}
+              title={text.userInput.substring(0, 50) + "..."}
+              onClick={() => selectWritingHandler(text._id)}
+              createdTime={text.createdAt.substring(0, 10)}
+            />
+          ))
+        ) : isLoading ? (
+          <div className="loading-box-wrapper">
+            <div className="loading-text">Geçmiş Kayıtlar Aranıyor</div>
+            <LoadingBox height="10vh" width="10vw" />
+          </div>
+        ) : isTextFound ? (
+          <div className="warning-message">Henüz hiç yazı türü seçmediniz.</div>
+        ) : (
+          <div className="danger-message">
+            Seçilen yazı türünde herhangi bir kayıt bulunamadı!
+          </div>
+        )}
       </div>
     </div>
   );

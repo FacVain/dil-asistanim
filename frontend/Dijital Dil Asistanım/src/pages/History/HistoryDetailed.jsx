@@ -27,7 +27,7 @@ const HistoryDetailed = () => {
         components={writings.map((writing) => writing.title)}
         width="300px"
         height="100vh"
-        buttonType="primary"
+        buttonType="sidebar"
         onClick={selectWritingHandler}
         expandedData={writings.map(
           (writing) => writing.content.substring(0, 70) + "...",
