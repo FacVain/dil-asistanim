@@ -28,11 +28,11 @@ passport.use(new LocalStrategy(
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:1453/auth/google/callback"
+    callbackURL: "/auth/google/callback"
   },
   async function(accessToken, refreshToken, profile, cb) {
     try {
-      let currentUser = await User.findOne({ googleId: profile.id });
+      let currentUser = await User.findOne({ googleId: profile.id }).exec();
       if (currentUser) {
         // Existing user
         console.log(`User ${profile.displayName} is existing`);

@@ -5,7 +5,7 @@ export const Button = ({ type, onClick, name, expandedData }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <button
-      onClick={() => onClick(name)}
+      onClick={onClick}
       // onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
       className={type}

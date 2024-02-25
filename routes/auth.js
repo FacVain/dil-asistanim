@@ -10,7 +10,12 @@ router.get("/login/success", (req, res) => {
         res.status(200).json({
             success: true,
             message: "successfull",
-            user: req.user,
+            user: req.user.schema.obj,
+        });
+    } else {
+        res.status(401).json({
+            success: false,
+            message: "failure",
         });
     }
 });
@@ -40,7 +45,9 @@ router.get("/login/success", (req, res) => {
                 error: loginErr.message,
               });
             }
-      
+            
+            req.session.userId = user._id;
+
             return res.status(200).json({
               success: true,
               message: 'Successfully logged in',
@@ -55,12 +62,16 @@ router.get("/login/failed", (req, res) => {
         success: false,
         message: "failure",
     });
-    res.redirect("http://localhost:5173");
 });
 
 router.get("/logout", (req, res) =>{
-    req.logout();
-    res.redirect("http://localhost:5173");
+    res.clearCookie('connect.sid'); 
+	req.logout(function(err) {
+		if(err) console.log(err);
+		req.session.destroy(function (err) { // destroys the session
+			res.send();
+		});
+	});
 })
 
 router.get('/google',
@@ -69,9 +80,9 @@ router.get('/google',
     })
 );
 
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://localhost:5173', 
+    successRedirect: process.env.FRONTEND_ORIGIN, 
     failureRedirect: '/login/failed' 
 }));
 

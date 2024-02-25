@@ -37,7 +37,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_ORIGIN,
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -48,13 +48,6 @@ app.use("/history", historyRoute);
 
 app.post("/api/query", isLoggedIn, async (req, res) => {
   try {
-    // Save the query to the database
-    /*
-    const newQuery = await pool.query(
-      'INSERT INTO queries (user_id, query) VALUES ($1, $2) RETURNING *',
-      [req.user.id, query]
-    ); */
-
     // Send the query to OpenAI's API
     const gptResponse = await sendRequestToGPT(req);
 
@@ -76,8 +69,8 @@ app.post("/api/query", isLoggedIn, async (req, res) => {
     // Save the document to the database
     const savedDocument = await newTextAnalysis.save();
 
-    // Send response back to client
-    res.json({ gptResponse: response.choices[0].message.content });
+    // Send the saved document back to the client as confirmation
+    res.json(savedDocument);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

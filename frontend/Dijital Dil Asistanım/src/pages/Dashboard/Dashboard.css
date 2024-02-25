@@ -1,5 +1,6 @@
 @import "../../variables.css";
 
+
 .dashboard-page {
   display: flex;
   flex-direction: column;
