@@ -1,15 +1,13 @@
 @import "../../variables.css";
 
-
 .dashboard-page {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
   align-items: center;
-  background-color: var(--primary-color);
   padding: var(--large-padding);
-  gap: var(--large-padding);
+  gap: var(--xxx-large-gap);
   font-size: var(--medium-font-size);
   font-weight: var(--medium-font-weight);
   font-family: var(--primary-font);
@@ -24,26 +22,6 @@
   gap: var(--medium-padding);
   align-items: center;
   justify-content: center;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: var(--small-padding);
-  cursor: pointer;
-
-  &:hover {
-    color: var(--quaternary-color);
-  }
-}
-
-.checkbox-input {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: var(--primary-color);
-  border: 2px solid var(--secondary-color);
-  cursor: pointer;
 }
 
 .writing-input {
@@ -80,4 +58,14 @@
   content: "Bir şey yazın...";
   color: gray;
   cursor: text;
+}
+
+.gpt-output {
+  display: flex;
+  padding: var(--medium-padding);
+  font-size: var(--medium-font-size);
+  font-weight: var(--medium-font-weight);
+  border: 1px solid var(--tertiary-color);
+  border-radius: var(--medium-border-radius);
+  width: 100%;
 }

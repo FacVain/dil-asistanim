@@ -1,22 +1,17 @@
-
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 // styling
 import "./Dashboard.css";
 import Button from "../../components/Button";
 import LoadingBox from "../../components/LoadingBox";
-
-const writingTypes = [
-  "Serbest Metin",
-  "Dilekçe",
-  "E-Posta (İş)",
-  "E-Posta (Akademik)",
-];
+import { textTypes } from "../../assets/textTypes";
+import { Checkbox } from "../../components/CheckBox";
 
 const Dashboard = () => {
   const [checkedType, setCheckedType] = useState("");
   const [writing, setWriting] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const [gptResponse, setGptResponse] = useState("");
 
   const boxRef = useRef(null);
 
@@ -38,10 +33,6 @@ const Dashboard = () => {
     }));
   }, []);
 
-  useEffect(() => {
-    console.log(size);
-  }, [size]);
-
   const sendWriting = async () => {
     setIsLoading(true);
 
@@ -60,6 +51,7 @@ const Dashboard = () => {
       .then((data) => {
         console.log(data);
         setIsLoading(false);
+        setGptResponse(data);
       });
   };
 
@@ -67,7 +59,7 @@ const Dashboard = () => {
     <div className="dashboard-page">
       <div className="dashboard-title">Dijital Dil Asistanım</div>
       <div className="select-type">
-        {writingTypes.map((type) => (
+        {textTypes.map((type) => (
           <Checkbox
             key={type}
             label={type}
@@ -77,7 +69,7 @@ const Dashboard = () => {
         ))}
       </div>
       <div className="writing-input">
-        <div className="writing-title">Yazı Örneği</div>
+        <div className="writing-title">Sizin Metniniz</div>
         <span
           className="textarea"
           role="textbox"
@@ -91,25 +83,19 @@ const Dashboard = () => {
         {isLoading && (
           <LoadingBox width={size.width + "px"} height={size.height + "px"} />
         )}
+        {gptResponse && (
+          <>
+            <div className="writing-title">Yapay Zeka Çıktısı</div>
+            <div className="gpt-output">{JSON.stringify(gptResponse)}</div>
+          </>
+        )}
       </div>
-      <Button onClick={sendWriting} type={"primary"} name="Gönder" />
-    </div>
-  );
-};
-
-
-const Checkbox = ({ label, value, onChange }) => {
-  return (
-    <label className="checkbox-label">
-      <input
-        className="checkbox-input"
-        type="checkbox"
-        checked={value}
-        onChange={onChange}
-        id={label}
+      <Button
+        onClick={sendWriting}
+        type={"primary"}
+        name={gptResponse ? "Edit" : "Gönder"}
       />
-      {label}
-    </label>
+    </div>
   );
 };
 
