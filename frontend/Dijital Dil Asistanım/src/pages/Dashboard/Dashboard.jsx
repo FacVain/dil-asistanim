@@ -1,5 +1,6 @@
-// styling
+
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+// styling
 import "./Dashboard.css";
 import Button from "../../components/Button";
 import LoadingBox from "../../components/LoadingBox";
@@ -95,6 +96,7 @@ const Dashboard = () => {
     </div>
   );
 };
+
 
 const Checkbox = ({ label, value, onChange }) => {
   return (

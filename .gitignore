@@ -55,7 +55,7 @@ typings/
 .eslintcache
 
 # Microbundle build output
-dist/
+#dist/
 
 # Output of 'npm pack'
 *.tgz
@@ -76,10 +76,10 @@ out/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+#dist
 
 # Rollup build output
-dist/
+#dist/
 
 # Storybook build outputs
 .storybook-out/
