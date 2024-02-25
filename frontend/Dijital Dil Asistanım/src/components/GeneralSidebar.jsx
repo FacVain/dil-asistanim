@@ -9,13 +9,15 @@ const GeneralSidebar = () => {
       width="300px"
       height="100%"
       header={import.meta.env.VITE_APP_NAME}
-      components={["Dashboard", "History", "Settings"]}
-      buttonType="primary"
+      components={["Home", "Dashboard", "History", "Settings"]}
+      buttonType="sidebar"
       notClosable
       onClick={(e) => {
         e.stopPropagation();
         console.log(e.target.innerText);
-        navigate(`/${e.target.innerText.toLowerCase()}`);
+        navigate(
+          `/${e.target.innerText === "Home" ? "" : e.target.innerText.toLowerCase()}`,
+        );
       }}
     />
   );

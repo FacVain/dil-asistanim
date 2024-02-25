@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import "./components.css";
 
-const Box = ({ size }) => {
+const Box = ({ size, content }) => {
   const [style, setStyle] = useState({});
 
   useEffect(() => {
     if (size === "small") {
-      setStyle({ width: "10%", height: "10%" });
+      setStyle({ width: "20vw", height: "10vh" });
     } else if (size === "medium") {
-      setStyle({ width: "25%", height: "25%" });
+      setStyle({ width: "40vw", height: "20vh" });
     } else if (size === "large") {
-      setStyle({ width: "50%", height: "50%" });
+      // setStyle({ width: "60vw", height: "30vh" });
     }
   }, [size]);
 
-  return <div className="box" style={style}></div>;
+  return (
+    <div className="box" style={style}>
+      {content}
+    </div>
+  );
 };
 
 export default Box;

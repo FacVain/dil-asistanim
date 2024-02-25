@@ -27,6 +27,9 @@ const Sidebar = ({
             onClick={onClick}
             name={component}
             expandedData={expandedData && expandedData[index]}
+            isActive={window.location.pathname.includes(
+              component.toLowerCase(),
+            )}
           />
         ))}
       </div>
