@@ -4,11 +4,13 @@ import "./history.css";
 import Card from "../../components/Card";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
+
 import axios from "axios";
 import { textTypes, textTypesEnum } from "../../assets/textTypes";
 import { Checkbox } from "../../components/CheckBox";
 import { useState } from "react";
 import LoadingBox from "../../components/LoadingBox";
+
 
 const History = () => {
   const navigate = useNavigate();
@@ -61,6 +63,7 @@ const History = () => {
             onChange={handleChange}
           />
         ))}
+        <Button onClick={getHistory} name="Fetch History" />
       </div>
       <Button onClick={getHistory} name="Geçmişi Göster" />
       <div className="card-wrapper">

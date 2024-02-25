@@ -7,8 +7,10 @@ export const authReducer = (state, action) => {
   console.log("authReducer action: ", action);
   switch (action.type) {
     case "LOGIN":
+      localStorage.setItem("user", JSON.stringify(action.payload));
       return { ...state, user: action.payload };
     case "LOGOUT":
+      localStorage.removeItem("user");
       return { ...state, user: null };
     default:
       return state;
@@ -33,9 +35,10 @@ export const AuthProvider = ({ children }) => {
       })
       .then((resObject) => {
         dispatch({ type: "LOGIN", payload: resObject.user });
+        console.log("RESOBJECT", resObject);
       })
       .catch((error) => {
-        console.error(error);
+        console.log("Unauthorized", error);
       });
   }, []);
 
