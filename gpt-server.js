@@ -53,12 +53,10 @@ app.use("/history", historyRoute);
 app.post('/api/query', isLoggedIn, async (req, res) => {
   
   try {
-    req.body.type = "mail";
-    req.body.mailType = "academic";
     // Send the query to OpenAI's API
     const gptResponse = await sendRequestToGPT(req);
     const robertaResponse = await sendRequestToXMLRoBERTa(req);
-    const userId = req.user.userId; // Retrieve the user ID from the session
+    const userId = req.user.id; // Retrieve the user ID from the session
 
 
     // Merge the request body and the GPT-3 response

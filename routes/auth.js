@@ -6,7 +6,6 @@ const User = require('../models/User');
 
 
 router.get("/login/success", (req, res) => {
-  console.log(req.session)
     if(req.user) {
         res.status(200).json({
             success: true,
@@ -46,8 +45,6 @@ router.get("/login/success", (req, res) => {
                 error: loginErr.message,
               });
             }
-            
-            req.session.userId = user._id;
 
             return res.status(200).json({
               success: true,
