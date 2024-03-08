@@ -98,6 +98,3 @@ fine-tune/xmlroberta-fine-tune/logs/*
 # XMLRoBERTa model files
 xmlroberta-request/sentiment_model/*
 xmlroberta-request/tone_model/*
-
-#Test request file
-gpt-request2/*
