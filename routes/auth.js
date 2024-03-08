@@ -10,7 +10,7 @@ router.get("/login/success", (req, res) => {
         res.status(200).json({
             success: true,
             message: "successfull",
-            user: req.user.schema.obj,
+            user: req.user,
         });
     } else {
         res.status(401).json({
@@ -45,8 +45,6 @@ router.get("/login/success", (req, res) => {
                 error: loginErr.message,
               });
             }
-            
-            req.session.userId = user._id;
 
             return res.status(200).json({
               success: true,

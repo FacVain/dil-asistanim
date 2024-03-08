@@ -21,6 +21,7 @@ console.log(process.env.NODE_ENV);
 const { isLoggedIn } = require('./middlewares/authMiddleware')
 
 const sendRequestToGPT = require('./gpt-request/gpt-request');
+const sendRequestToXMLRoBERTa = require('./xmlroberta-request/roberta-request');
 
 const app = express();
 app.use(express.json());
@@ -29,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: process.env.COOKIE_SECRET, // ToDo güzel bir secret seçelim!!
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
 }))
 
@@ -54,8 +55,8 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
   try {
     // Send the query to OpenAI's API
     const gptResponse = await sendRequestToGPT(req);
-
-    const userId = req.session.userId; // Retrieve the user ID from the session
+    const robertaResponse = await sendRequestToXMLRoBERTa(req);
+    const userId = req.user.id; // Retrieve the user ID from the session
 
 
     // Merge the request body and the GPT-3 response
@@ -74,8 +75,7 @@ app.post('/api/query', isLoggedIn, async (req, res) => {
     // Save the document to the database
     const savedDocument = await newTextAnalysis.save();
 
-    // Send the saved document back to the client as confirmation
-    res.json(savedDocument);
+    res.json({ robertaResponse: robertaResponse, gptResponse: gptResponse });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

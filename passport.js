@@ -53,18 +53,26 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-passport.serializeUser((user, done) => {
-  done(null, user.id); // Mongoose automatically creates an _id field for your documents
+passport.serializeUser((user, cb) => {
+  //done(null, user.id); // Mongoose automatically creates an _id field for your documents
+  process.nextTick(function() {
+    cb(null, { id: user.id, username: user.username });
+  });
 });
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((user, cb) =>{
+  /*
   try {
-    const user = User.findById(id);
-    done(null, user);
+    const user = await User.findById(id);
+    done(null, {id:id, username: user.username});
   }
   catch (error) {
     done(error);
   }
+  */
+  process.nextTick(function() {
+    return cb(null, user);
+  });
   
 });
 
