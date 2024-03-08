@@ -6,11 +6,12 @@ const User = require('../models/User');
 
 
 router.get("/login/success", (req, res) => {
+  console.log(req.session)
     if(req.user) {
         res.status(200).json({
             success: true,
             message: "successfull",
-            user: req.user.schema.obj,
+            user: req.user,
         });
     } else {
         res.status(401).json({

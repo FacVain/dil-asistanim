@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: process.env.COOKIE_SECRET, // ToDo güzel bir secret seçelim!!
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
 }))
 
@@ -53,11 +53,12 @@ app.use("/history", historyRoute);
 app.post('/api/query', isLoggedIn, async (req, res) => {
   
   try {
+    req.body.type = "mail";
+    req.body.mailType = "academic";
     // Send the query to OpenAI's API
     const gptResponse = await sendRequestToGPT(req);
     const robertaResponse = await sendRequestToXMLRoBERTa(req);
-
-    const userId = req.session.userId; // Retrieve the user ID from the session
+    const userId = req.user.userId; // Retrieve the user ID from the session
 
 
     // Merge the request body and the GPT-3 response
