@@ -3,6 +3,7 @@ const express = require('express');
 const passport = require('passport');
 require('./passport');
 const session = require('express-session');
+const path = require('path');
 const cors = require('cors');
 const authRoute = require("./routes/auth");
 const historyRoute = require("./routes/history");
@@ -24,6 +25,7 @@ const sendRequestToGPT = require('./gpt-request/gpt-request');
 const app = express();
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: process.env.COOKIE_SECRET, // ToDo güzel bir secret seçelim!!
   resave: false,

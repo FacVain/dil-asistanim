@@ -90,3 +90,8 @@ out/
 
 # Serverless directories
 .serverless/
+
+xmlroberta-request/sentiment_model
+xmlroberta-request/tone_model
+fine-tune/xmlroberta-fine-tune/logs
+fine-tune/xmlroberta-fine-tune/results
