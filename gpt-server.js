@@ -7,9 +7,7 @@ const path = require('path');
 const cors = require('cors');
 const authRoute = require("./routes/auth");
 const historyRoute = require("./routes/history");
-
-
-const getModelByType = require('./models/ModelFactory')
+const apiRoute = require("./routes/api");
 
 const mongoose = require('mongoose');
 const connectDB =require("./config/dbConn")
@@ -17,11 +15,6 @@ const connectDB =require("./config/dbConn")
 connectDB()
 
 console.log(process.env.NODE_ENV);
-
-const { isLoggedIn } = require('./middlewares/authMiddleware')
-
-const sendRequestToGPT = require('./gpt-request/gpt-request');
-const sendRequestToXMLRoBERTa = require('./xmlroberta-request/roberta-request');
 
 const app = express();
 app.use(express.json());
@@ -48,39 +41,7 @@ app.use(
 
 app.use("/auth", authRoute);
 app.use("/history", historyRoute);
-
-
-app.post('/api/query', isLoggedIn, async (req, res) => {
-  
-  try {
-    // Send the query to OpenAI's API
-    const gptResponse = await sendRequestToGPT(req);
-    const robertaResponse = await sendRequestToXMLRoBERTa(req);
-    const userId = req.user.id; // Retrieve the user ID from the session
-
-
-    // Merge the request body and the GPT-3 response
-    const documentData = {
-      ...req.body, // this will spread the type, tone, and userInput fields
-      ...gptResponse, // this will spread the sentimentAnalysis, toneAnalysis, rewrittenTextFromUserText, and suggestionForUserText fields
-      user: userId // Add the user's ID as a foreign key reference
-    };
-
-    // Determine the correct model based on the input type
-    const AnalysisModel = getModelByType(req.body.type);
-
-    // Create a new document using the dynamic model
-    const newTextAnalysis = new AnalysisModel(documentData);
-
-    // Save the document to the database
-    const savedDocument = await newTextAnalysis.save();
-
-    res.json({ robertaResponse: robertaResponse, gptResponse: gptResponse });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+app.use("/api", apiRoute);
 
 const port = process.env.PORT || 3000;
 
