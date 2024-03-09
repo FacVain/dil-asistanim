@@ -1,13 +1,7 @@
 const mongoose = require('mongoose');
 
-async function fetchUserHistoryAndStats(AnalysisModel, userId) {
+async function fetchStats(AnalysisModel, userId) {
     let idToSearch = new mongoose.Types.ObjectId(userId);
-    
-    const userHistory = await AnalysisModel.find({ user: idToSearch })
-        .sort({ createdAt: -1 })
-        .limit(10)
-        .exec();
-
     const totalSentimentsCount = await AnalysisModel.countDocuments({ user: idToSearch });
 
     const sentimentCounts = await AnalysisModel.aggregate([
@@ -43,14 +37,28 @@ async function fetchUserHistoryAndStats(AnalysisModel, userId) {
     });
 
     return {
+        sentimentRatios,
+        toneRatios
+    };
+}
+
+async function fetchUserHistoryAndStats(AnalysisModel, userId) {
+    let idToSearch = new mongoose.Types.ObjectId(userId);
+    
+    const userHistory = await AnalysisModel.find({ user: idToSearch })
+        .sort({ createdAt: -1 })
+        .limit(10)
+        .exec();
+
+    const stats = await fetchStats(AnalysisModel, userId);
+    console.log("history: ", userHistory, "stats: ", stats);
+    return {
         userHistory,
-        stats: {
-            sentimentRatios,
-            toneRatios
-        }
+        stats
     };
 }
 
 module.exports = {
-    fetchUserHistoryAndStats
+    fetchUserHistoryAndStats,
+    fetchStats
 };
