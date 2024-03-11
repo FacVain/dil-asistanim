@@ -10,6 +10,7 @@ const Sidebar = ({
   buttonType,
   onClick,
   expandedData,
+  notClosable,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   return (
@@ -25,11 +26,14 @@ const Sidebar = ({
             type={buttonType}
             onClick={onClick}
             name={component}
-            expandedData={expandedData[index]}
+            expandedData={expandedData && expandedData[index]}
+            isActive={window.location.pathname.includes(
+              component.toLowerCase(),
+            )}
           />
         ))}
       </div>
-      {isOpen ? (
+      {notClosable ? null : isOpen ? (
         <DoubleLeftOutlined
           className="sidebar-close-icon"
           onClick={() => setIsOpen((prev) => !prev)}

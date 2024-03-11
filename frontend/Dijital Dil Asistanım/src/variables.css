@@ -4,8 +4,11 @@
   --secondary-color: #DBE2EF;
   --tertiary-color: #3F72AF;
   --quaternary-color: #112D4E;
-  --border-color: #2a2b61;
+  --border-color: #A9A9A9;
+  --text-color: #4a4d4f;
   /* FONTS */
+  --primary-font: 'Poppins', sans-serif;
+
   /* FONT-SIZE */
   --small-font-size: 0.8em;
   --medium-font-size: 1em;

@@ -3,12 +3,17 @@
 .history {
   height: 100vh;
   width: 100vw;
-  background-color: #e5edf1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: var(--xxx-large-gap);
-  font-family: 'Poppins', sans-serif;
+  padding: var(--large-padding);
+  font-family: "Poppins", sans-serif;
   overflow-x: hidden;
+}
+
+.page-title {
+  font-size: var(--xx-large-font-size);
 }
 
 .history-writing-wrapper {
@@ -17,4 +22,43 @@
   border-radius: var(--large-border-radius);
   border: 1px solid #fff;
   padding: var(--large-padding);
+}
+
+.select-type {
+  display: flex;
+  gap: var(--medium-padding);
+  align-items: center;
+  justify-content: center;
+}
+
+.warning-message {
+  font-size: var(--medium-font-size);
+  font-weight: var(--medium-font-weight);
+  font-family: var(--primary-font);
+  padding: var(--medium-padding);
+  border-radius: var(--small-border-radius);
+  background-color: var(--tertiary-color);
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.danger-message {
+  font-size: var(--medium-font-size);
+  font-weight: var(--medium-font-weight);
+  font-family: var(--primary-font);
+  padding: var(--medium-padding);
+  border-radius: var(--small-border-radius);
+  background-color: rgb(196, 92, 24);
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.loading-box-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: var(--large-font-size);
+  font-weight: var(--medium-font-weight);
 }
