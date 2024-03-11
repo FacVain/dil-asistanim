@@ -22,7 +22,7 @@ const App = () => {
   return (
     <div className="app">
       <Router>
-        <GeneralSidebar />
+        {user && <GeneralSidebar />}
         <Routes>
           <Route
             path="/"
