@@ -10,14 +10,19 @@ import { textTypes, textTypesEnum } from "../../assets/textTypes";
 import { Checkbox } from "../../components/CheckBox";
 import { useState } from "react";
 import LoadingBox from "../../components/LoadingBox";
-
+import useHistoryContext from "../../hooks/useHistoryContext";
 
 const History = () => {
   const navigate = useNavigate();
+  const { dispatch, texts } = useHistoryContext();
+
   const [checkedType, setCheckedType] = useState("");
-  const [texts, setTexts] = useState([]);
   const [isTextFound, setIsTextFound] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleSaveHistory = (texts) => {
+    dispatch({ type: textTypesEnum[checkedType], payload: texts });
+  };
 
   const handleChange = (e) => {
     e.stopPropagation();
@@ -45,7 +50,7 @@ const History = () => {
         },
       )
       .then((response) => {
-        setTexts(response.data.userHistory);
+        handleSaveHistory(response.data.userHistory);
         response.data.userHistory.length == 0 ? setIsTextFound(false) : null;
         setIsLoading(false);
       });
