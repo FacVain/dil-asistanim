@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: process.env.COOKIE_SECRET, // ToDo güzel bir secret seçelim!!
+  secret: process.env.COOKIE_SECRET, 
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!

@@ -6,21 +6,21 @@ const User = require('./models/User'); // Import the User model
 require('dotenv').config();
 
 passport.use(new LocalStrategy(
-  async function(username, password, done) {
+  async function verify(username, password, cb) {
     try {
       const user = await User.findOne({ username: username }).exec();
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+        return cb(null, false, { message: 'Incorrect username.' });
       }
       
       const match = await bcrypt.compare(password, user.hashedPassword);
       if (!match) {
-        return done(null, false, { message: 'Incorrect password.' });
+        return cb(null, false, { message: 'Incorrect password.' });
       }
       
-      return done(null, user);
+      return cb(null, user);
     } catch (err) {
-      return done(err);
+      return cb(err);
     }
   }
 ));

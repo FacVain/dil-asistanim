@@ -13,7 +13,7 @@ router.post('/query', isLoggedIn, async (req, res) => {
         // Send the query to OpenAI's API
         const gptResponse = await sendRequestToGPT(req);
         const robertaResponse = await sendRequestToXMLRoBERTa(req);
-        const userId = req.user.id; // Retrieve the user ID from the session
+        const userId = req.session.passport.user.id; // Retrieve the user ID from the session
     
     
         // Merge the request body and the GPT-3 response
@@ -41,7 +41,7 @@ router.post('/query', isLoggedIn, async (req, res) => {
 
 router.post('/history', isLoggedIn, async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.session.passport.user.id;
         const AnalysisModel = getModelByType(req.body.type);
         const stats = await fetchStats(AnalysisModel, userId);
         

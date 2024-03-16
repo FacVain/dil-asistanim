@@ -6,11 +6,11 @@ const User = require('../models/User');
 
 
 router.get("/login/success", (req, res) => {
-    if(req.user) {
+    if(req.session.hasOwnProperty('passport')) {
         res.status(200).json({
             success: true,
             message: "successfull",
-            user: req.user,
+            user: req.session.passport.user,
         });
     } else {
         res.status(401).json({
@@ -20,40 +20,40 @@ router.get("/login/success", (req, res) => {
     }
 });
 
-    router.post('/login', (req, res, next) => {
-        passport.authenticate('local', (err, user, info) => {
-          if (err) {
-            return res.status(500).json({
-              success: false,
-              message: 'Internal Server Error',
-              error: err.message,
-            });
-          }
-      
-          if (!user) {
-            return res.status(401).json({
-              success: false,
-              message: info.message || 'Authentication failed.',
-            });
-          }
-      
-          req.logIn(user, (loginErr) => {
-            if (loginErr) {
-              return res.status(500).json({
-                success: false,
-                message: 'Internal Server Error',
-                error: loginErr.message,
-              });
-            }
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+        return res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+            error: err.message,
+        });
+        }
 
-            return res.status(200).json({
-              success: true,
-              message: 'Successfully logged in',
-              userInfo: {username: user.username, id: user._id},
+        if (!user) {
+        return res.status(401).json({
+            success: false,
+            message: info.message || 'Authentication failed.',
+        });
+        }
+
+        req.logIn(user, (loginErr) => {
+        if (loginErr) {
+            return res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+            error: loginErr.message,
             });
-          });
-        })(req, res, next);
-      });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Successfully logged in',
+            userInfo: {username: user.username, id: user._id},
+        });
+        });
+    })(req, res, next);
+});
 
 router.get("/login/failed", (req, res) => {
     res.status(401).json({

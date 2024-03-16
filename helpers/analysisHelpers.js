@@ -51,7 +51,6 @@ async function fetchUserHistoryAndStats(AnalysisModel, userId) {
         .exec();
 
     const stats = await fetchStats(AnalysisModel, userId);
-    console.log("history: ", userHistory, "stats: ", stats);
     return {
         userHistory,
         stats
