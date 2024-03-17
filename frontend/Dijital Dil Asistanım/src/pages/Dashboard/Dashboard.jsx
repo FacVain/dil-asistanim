@@ -53,7 +53,7 @@ const Dashboard = () => {
     const queryObject = await checkTone();
     console.log(queryObject);
 
-    await fetch("http://localhost:1453/api/query", {
+    await fetch(import.meta.env.VITE_API_URL + "/api/query", {
       method: "POST",
       credentials: "include",
       headers: {
