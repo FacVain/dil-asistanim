@@ -10,8 +10,9 @@ const FreeTextAnalysis = require('../models/SerbestYazi');
 
 
 router.get('/mails', isLoggedIn, async (req, res, next) => {
+    console.log(req.body.mailType);
     try {
-        const response = await fetchUserHistoryAndStats(MailAnalysis, req.session.passport.user.id);
+        const response = await fetchUserHistoryAndStats(MailAnalysis, req.session.passport.user.id, req.body.mailType);
         res.json(response);
     } catch (error) {
         next(error); // Pass errors to the error handler middleware
