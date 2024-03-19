@@ -94,3 +94,6 @@ dist/
 # Transformers model files
 fine-tune/xmlroberta-fine-tune/logs/*
 fine-tune/xmlroberta-fine-tune/results/*
+
+# XML-Roberta fine-tune model files
+xmlroberta-request/*
