@@ -7,9 +7,11 @@ const Sidebar = ({
   height,
   header,
   components,
+  bottomComponents,
   buttonType,
-  onClick,
+  onClicks,
   expandedData,
+  notClosable,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   return (
@@ -23,13 +25,26 @@ const Sidebar = ({
           <Button
             key={component}
             type={buttonType}
-            onClick={onClick}
+            onClick={onClicks[index]}
             name={component}
-            expandedData={expandedData[index]}
+            expandedData={expandedData && expandedData[index]}
+            isActive={window.location.pathname.includes(
+              component.toLowerCase(),
+            )}
           />
         ))}
+        <div className="sidebar-footer">
+          {bottomComponents.map((component, index) => (
+            <Button
+              key={component}
+              type={buttonType}
+              onClick={onClicks[components.length + index]}
+              name={component}
+            />
+          ))}
+        </div>
       </div>
-      {isOpen ? (
+      {notClosable ? null : isOpen ? (
         <DoubleLeftOutlined
           className="sidebar-close-icon"
           onClick={() => setIsOpen((prev) => !prev)}

@@ -5,23 +5,27 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Home from "./pages/Home/Home";
+import "./index.css";
+
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import useAuthContext from "./hooks/useAuthContext";
 import History from "./pages/History/History";
 import HistoryDetailed from "./pages/History/HistoryDetailed";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import GeneralSidebar from "./components/GeneralSidebar";
 
 const App = () => {
   const { user } = useAuthContext();
 
   return (
-    <div className="w-screen h-screen bg-white ">
+    <div className="app">
       <Router>
+        {user && <GeneralSidebar />}
         <Routes>
           <Route
             path="/"
-            element={user ? <Home /> : <Navigate to="/login" />}
+            element={user ? <Dashboard /> : <Navigate to="/login" />}
           />
           <Route
             path="/login"
@@ -33,11 +37,11 @@ const App = () => {
           />
           <Route
             path="/history"
-            element={true ? <History /> : <Navigate to="/login" />}
+            element={user ? <History /> : <Navigate to="/login" />}
           />
           <Route
             path="/history/:id"
-            element={true ? <HistoryDetailed /> : <Navigate to="/login" />}
+            element={user ? <HistoryDetailed /> : <Navigate to="/login" />}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
