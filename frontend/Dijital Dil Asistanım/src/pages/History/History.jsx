@@ -14,23 +14,6 @@ import useHistoryContext from "../../hooks/useHistoryContext";
 import { CustomPie } from "../../components/CustomPie";
 import { Chart } from "../../components/Chart";
 
-/*
-"stats": {
-        "sentimentRatios": {
-            "Nötr": "66.67",
-            "Pozitif": "33.33"
-        },
-        "toneRatios": {
-            "Resmi": "22.22",
-            "İddialı": "11.11",
-            "İşbirliği": "22.22",
-            "Samimi": "11.11",
-            "Gayri Resmi": "22.22",
-            "İyimser": "11.11"
-        }
-    }
-*/
-
 const History = () => {
   const navigate = useNavigate();
   const { dispatch, texts, generalStats } = useHistoryContext();

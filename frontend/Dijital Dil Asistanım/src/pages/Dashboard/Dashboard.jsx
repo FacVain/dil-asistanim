@@ -10,6 +10,7 @@ import {
 } from "../../assets/textTypes";
 import { Checkbox } from "../../components/CheckBox";
 import ToneQuestionPopup from "../../components/ToneQuestionPopup";
+import SuggestionComponent from "../../components/SuggestionComponent";
 
 const Dashboard = () => {
   const [checkedType, setCheckedType] = useState("");
@@ -24,6 +25,7 @@ const Dashboard = () => {
 
   const handleChange = (e) => {
     e.stopPropagation();
+    gptResponse ? setGptResponse("") : null;
     setCheckedType(checkedType === e.target.id ? "" : e.target.id);
     if (e.target.id === "Serbest Metin") {
       checkedType === e.target.id ? null : setIsPopupOpen(true);
@@ -116,10 +118,7 @@ const Dashboard = () => {
         )}
         {isPopupOpen && <ToneQuestionPopup sendTone={handleSelectTone} />}
         {gptResponse && (
-          <>
-            <div className="writing-title">Yapay Zeka Çıktısı</div>
-            <div className="gpt-output">{JSON.stringify(gptResponse)}</div>
-          </>
+          <SuggestionComponent suggestion={gptResponse.gptResponse} />
         )}
       </div>
       <Button
