@@ -43,7 +43,7 @@ router.post('/history', isLoggedIn, async (req, res) => {
     try {
         const userId = req.session.passport.user.id;
         const AnalysisModel = getModelByType(req.body.type);
-        const stats = await fetchStats(AnalysisModel, userId);
+        const stats = await fetchStats(AnalysisModel, userId, req.body.mailType);
         
         const gptResponse = await sendStatsToGPT(stats, req.body.type);
 
