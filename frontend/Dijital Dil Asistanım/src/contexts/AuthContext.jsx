@@ -23,6 +23,13 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
+    if (localStorage.getItem("user")) {
+      dispatch({
+        type: "LOGIN",
+        payload: JSON.parse(localStorage.getItem("user")),
+      });
+      return;
+    }
     axios
       .get(`${import.meta.env.VITE_API_URL}/auth/login/success`, {
         withCredentials: true,
@@ -35,10 +42,9 @@ export const AuthProvider = ({ children }) => {
       })
       .then((resObject) => {
         dispatch({ type: "LOGIN", payload: resObject.user });
-        console.log("RESOBJECT", resObject);
       })
       .catch((error) => {
-        console.log("Unauthorized", error);
+        console.error(error);
       });
   }, []);
 

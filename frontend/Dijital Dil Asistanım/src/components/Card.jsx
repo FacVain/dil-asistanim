@@ -1,8 +1,7 @@
-const Card = ({ title, createdTime, onClick }) => {
+const Card = ({ title, onClick }) => {
   return (
     <div className="card" onClick={onClick}>
       <div className="card-title">{title}</div>
-      <div className="card-time">{createdTime}</div>
     </div>
   );
 };

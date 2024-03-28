@@ -2,106 +2,19 @@
 
 .history {
   height: 100vh;
-  width: calc(100vw - var(--sidebar-width));
-  margin-left: var(--sidebar-width);
+  width: 100vw;
+  background-color: #e5edf1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: var(--xxx-large-gap);
-  padding: var(--large-padding);
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
 }
 
-.page-title {
-  font-size: var(--xx-large-font-size);
-}
-
-.history-text-wrapper{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--medium-gap);
-  width: 100%;
-}
-
-.history-text-title{
-  font-size: var(--large-font-size);
-  font-weight: var(--bold-font-weight);
-  font-family: var(--primary-font);
-}
-
-.history-text {
-  width: 80%;
+.history-writing-wrapper {
+  width: 50%;
+  height: 80%;
   border-radius: var(--large-border-radius);
-  border: 2px solid var(--secondary-color);
+  border: 1px solid #fff;
   padding: var(--large-padding);
-}
-
-.select-type {
-  display: flex;
-  gap: var(--medium-padding);
-  align-items: center;
-  justify-content: center;
-}
-
-.warning-message {
-  font-size: var(--medium-font-size);
-  font-weight: var(--medium-font-weight);
-  font-family: var(--primary-font);
-  padding: var(--medium-padding);
-  border-radius: var(--small-border-radius);
-  background-color: var(--tertiary-color);
-  color: #fff;
-  text-align: center;
-  margin: 0 auto;
-}
-
-.danger-message {
-  font-size: var(--medium-font-size);
-  font-weight: var(--medium-font-weight);
-  font-family: var(--primary-font);
-  padding: var(--medium-padding);
-  border-radius: var(--small-border-radius);
-  background-color: rgb(196, 92, 24);
-  color: #fff;
-  text-align: center;
-  margin: 0 auto;
-}
-
-.loading-box-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: var(--large-font-size);
-  font-weight: var(--medium-font-weight);
-}
-
-.history-stats{
-  display: flex;
-  flex-direction: column;
-  gap: var(--large-gap);
-  justify-content: center;
-  align-items: center;
-  max-height: 700px;
-  width: 80%;
-  border: 2px solid var(--secondary-color);
-  border-radius: 10px;
-  padding: var(--medium-padding);
-}
-
-.history-stats-title{
-  font-size: var(--large-font-size);
-  font-weight: var(--bold-font-weight);
-  font-family: var(--primary-font);
-}
-
-.history-stats-chart{
-  width: 400px;
-}
-
-.history-stats-graphs{
-  display: flex;
-  align-items: center; 
-  gap: 150px;
 }

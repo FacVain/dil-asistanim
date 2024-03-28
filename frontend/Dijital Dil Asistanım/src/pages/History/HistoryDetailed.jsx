@@ -1,40 +1,39 @@
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../../components/Sidebar";
+import writings from "./data";
 import { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import useHistoryContext from "../../hooks/useHistoryContext";
-import SuggestionComponent from "../../components/SuggestionComponent";
 
 const HistoryDetailed = () => {
   const navigate = useNavigate();
-  const { texts } = useHistoryContext();
-  const [currentText, setCurrentText] = useState("");
+  const [currentWriting, setCurrentWriting] = useState("");
 
   useEffect(() => {
-    texts.forEach((text) => {
-      if (text._id === window.location.href.split("/")[4]) {
-        setCurrentText(text);
+    writings.forEach((writing) => {
+      if (writing.id === parseInt(window.location.pathname.split("/")[2])) {
+        setCurrentWriting(writing);
       }
     });
-  }, [window.location.href, texts]);
+  }, [window.location.href]);
 
-  const selectWritingHandler = (_id) => {
-    navigate(`/history/${_id}`);
+  const selectWritingHandler = (writingTitle) => {
+    const id = writings.find((writing) => writing.title === writingTitle).id;
+    navigate(`/history/${id}`);
   };
 
   return (
     <div className="history">
-      <Navbar
-        title={"Geçmiş Yazılarınız"}
-        components={texts.map((text) => {
-          return { _id: text._id, userInput: text.userInput };
-        })}
+      <Sidebar
+        header="Geçmiş Yazılarım"
+        components={writings.map((writing) => writing.title)}
+        width="300px"
+        height="100vh"
+        buttonType="primary"
         onClick={selectWritingHandler}
+        expandedData={writings.map(
+          (writing) => writing.content.substring(0, 70) + "...",
+        )}
       />
-      <div className="history-text-wrapper">
-        <div className="history-text-title">METİN:</div>
-        <div className="history-text">{currentText.userInput}</div>
-      </div>
-      {<SuggestionComponent suggestion={currentText} />}
+      <div className="history-writing-wrapper">{currentWriting.content}</div>
     </div>
   );
 };

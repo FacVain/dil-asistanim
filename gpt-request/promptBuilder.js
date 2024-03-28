@@ -10,6 +10,11 @@ const {
 
 
 function buildPrompt(req){
+    /*
+    req.body.type = "mail"
+    req.body.mailType = "academic"
+    req.body.tone = "Mutlu"
+    */
     let schema, systemMessage = commonSystemMessage;
     switch(req.body.type){
         case "dilekce":
@@ -41,12 +46,4 @@ function buildPrompt(req){
     return [prompt, schema];
 }
 
-const statsPrompt = ChatPromptTemplate.fromMessages([
-    ["system", "Kullanıcının {type} yazı türünde yazdığı metinlerden elde edilen genel sentiment ve ton analizi istatistiklerini inceleyerek kullanıcının bu yazı türü için performansını değerlendir ve gelişimi için detaylı önerilerde bulun."],
-    ["human", "{stats}"]
-]);
-
-module.exports = {
-    buildPrompt,
-    statsPrompt
-};
+module.exports = buildPrompt;

@@ -1,7 +1,7 @@
 const { ChatOpenAI } = require("@langchain/openai");
 const { JsonOutputFunctionsParser } = require("langchain/output_parsers");
 const { createStructuredOutputRunnable } =  require("langchain/chains/openai_functions");
-const {buildPrompt, statsPrompt} = require("./promptBuilder");
+const buildPrompt = require("./promptBuilder");
 
 const model = new ChatOpenAI({ modelName: process.env.MODEL_NAME, temperature: 0 });
 
@@ -25,16 +25,4 @@ async function sendRequestToGPT(req) {
   return response;
 }
 
-async function sendStatsToGPT(stats, type) {
-  const model = new ChatOpenAI({ modelName: process.env.MODEL_NAME});
-  const prompt = await statsPrompt.format({ type: type, stats: JSON.stringify(stats)});
-
-  const response = await model.invoke(prompt);
-  
-  return response.content;
-}
-
-module.exports = {
-  sendRequestToGPT,
-  sendStatsToGPT
-};
+module.exports = sendRequestToGPT;

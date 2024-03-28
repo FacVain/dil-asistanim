@@ -11,7 +11,7 @@ const FreeTextAnalysis = require('../models/SerbestYazi');
 
 router.get('/mails', isLoggedIn, async (req, res, next) => {
     try {
-        const response = await fetchUserHistoryAndStats(MailAnalysis, req.user.id);
+        const response = await fetchUserHistoryAndStats(MailAnalysis, req.session.userId);
         res.json(response);
     } catch (error) {
         next(error); // Pass errors to the error handler middleware
@@ -21,7 +21,7 @@ router.get('/mails', isLoggedIn, async (req, res, next) => {
 
 router.get('/petitions', isLoggedIn, async (req, res, next) => {
     try {
-        const response = await fetchUserHistoryAndStats(PetitionAnalysis, req.user.id);
+        const response = await fetchUserHistoryAndStats(PetitionAnalysis, req.session.userId);
         res.json(response);
     } catch (error) {
         next(error); // Pass errors to the error handler middleware
@@ -31,7 +31,7 @@ router.get('/petitions', isLoggedIn, async (req, res, next) => {
 
 router.get('/freetexts', isLoggedIn, async (req, res, next) => {
     try {
-        const response = await fetchUserHistoryAndStats(FreeTextAnalysis, req.user.id);
+        const response = await fetchUserHistoryAndStats(FreeTextAnalysis, req.session.userId);
         res.json(response);
     } catch (error) {
         next(error); // Pass errors to the error handler middleware
