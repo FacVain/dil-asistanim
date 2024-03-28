@@ -1,11 +1,14 @@
 :root {
+  /* Special Sizes */
+  --sidebar-width: 300px;
   /* COLORS */
   --primary-color: #F9F7F7;
-  --secondary-color: #DBE2EF;
-  --tertiary-color: #3F72AF;
+  --secondary-color: #D2DAFF;
+  --tertiary-color: #B1B2FF;
   --quaternary-color: #112D4E;
   --border-color: #A9A9A9;
   --text-color: #4a4d4f;
+  --error-color: #ff0033;
   /* FONTS */
   --primary-font: 'Poppins', sans-serif;
 

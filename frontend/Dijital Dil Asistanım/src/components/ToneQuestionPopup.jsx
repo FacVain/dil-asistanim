@@ -19,6 +19,11 @@ const icons = [
 
 const ToneQuestionPopup = ({ sendTone }) => {
   const [tone, setTone] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSelectTone = () => {
+    tone !== "" ? sendTone(tone) : setError("Lütfen bir duygu seçiniz!");
+  };
 
   return (
     <div className="popup-blur">
@@ -39,14 +44,9 @@ const ToneQuestionPopup = ({ sendTone }) => {
             />
           ))}
         </div>
+        {error && <div className="popup-error-text">{error}</div>}
         <div style={{ marginLeft: "auto" }}>
-          <Button
-            onClick={() => {
-              sendTone(tone);
-            }}
-            type={"primary"}
-            name={"Onayla"}
-          />
+          <Button onClick={handleSelectTone} type={"primary"} name={"Onayla"} />
         </div>
       </div>
     </div>

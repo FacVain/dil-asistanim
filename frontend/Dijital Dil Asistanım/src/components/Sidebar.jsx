@@ -7,8 +7,9 @@ const Sidebar = ({
   height,
   header,
   components,
+  bottomComponents,
   buttonType,
-  onClick,
+  onClicks,
   expandedData,
   notClosable,
 }) => {
@@ -24,7 +25,7 @@ const Sidebar = ({
           <Button
             key={component}
             type={buttonType}
-            onClick={onClick}
+            onClick={onClicks[index]}
             name={component}
             expandedData={expandedData && expandedData[index]}
             isActive={window.location.pathname.includes(
@@ -32,6 +33,16 @@ const Sidebar = ({
             )}
           />
         ))}
+        <div className="sidebar-footer">
+          {bottomComponents.map((component, index) => (
+            <Button
+              key={component}
+              type={buttonType}
+              onClick={onClicks[components.length + index]}
+              name={component}
+            />
+          ))}
+        </div>
       </div>
       {notClosable ? null : isOpen ? (
         <DoubleLeftOutlined

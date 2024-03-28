@@ -7,7 +7,6 @@ import {
 
 import "./index.css";
 
-import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import useAuthContext from "./hooks/useAuthContext";
@@ -26,10 +25,6 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={user ? <Home /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/dashboard"
             element={user ? <Dashboard /> : <Navigate to="/login" />}
           />
           <Route

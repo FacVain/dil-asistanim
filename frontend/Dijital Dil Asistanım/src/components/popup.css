@@ -51,6 +51,12 @@
     color: var(--text-color);
 }
 
+.popup-error-text {
+    font-size: var(--medium-font-size);
+    font-weight: var(--bold-font-weight);
+    color: var(--error-color);
+}
+
 .popup-icons {
     display: flex;
     justify-content: space-between;

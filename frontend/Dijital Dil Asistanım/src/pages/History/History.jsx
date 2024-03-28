@@ -10,18 +10,36 @@ import { textTypes, textTypesEnum } from "../../assets/textTypes";
 import { Checkbox } from "../../components/CheckBox";
 import { useState } from "react";
 import LoadingBox from "../../components/LoadingBox";
-
+import useHistoryContext from "../../hooks/useHistoryContext";
+import { CustomPie } from "../../components/CustomPie";
+import { Chart } from "../../components/Chart";
 
 const History = () => {
   const navigate = useNavigate();
+  const { dispatch, texts, generalStats } = useHistoryContext();
+
   const [checkedType, setCheckedType] = useState("");
-  const [texts, setTexts] = useState([]);
   const [isTextFound, setIsTextFound] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleSaveHistory = (texts, generalStats) => {
+    dispatch({
+      type: textTypesEnum[checkedType],
+      payload: {
+        texts: texts,
+        generalStats: generalStats,
+      },
+    });
+  };
+
   const handleChange = (e) => {
     e.stopPropagation();
-    setCheckedType(checkedType === e.target.id ? "" : e.target.id);
+    if (checkedType === "") {
+      setCheckedType(checkedType === e.target.id ? "" : e.target.id);
+    } else if (checkedType !== e.target.id) {
+      dispatch({ type: "CLEAR_HISTORY" });
+      setCheckedType(e.target.id);
+    }
   };
 
   const selectWritingHandler = (id) => {
@@ -45,7 +63,7 @@ const History = () => {
         },
       )
       .then((response) => {
-        setTexts(response.data.userHistory);
+        handleSaveHistory(response.data.userHistory, response.data.stats);
         response.data.userHistory.length == 0 ? setIsTextFound(false) : null;
         setIsLoading(false);
       });
@@ -63,9 +81,37 @@ const History = () => {
             onChange={handleChange}
           />
         ))}
-        <Button onClick={getHistory} name="Fetch History" />
       </div>
       <Button onClick={getHistory} name="Geçmişi Göster" />
+      {generalStats &&
+        generalStats.toneRatios &&
+        generalStats.sentimentRatios && (
+          <div className="history-stats">
+            <div className="history-stats-title">
+              Yazılarınızın Genel İstatistikleri
+            </div>
+            <div className="history-stats-graphs">
+              <div className="history-pie">
+                <CustomPie
+                  pieData={{
+                    title: "Ton Oranları (%)",
+                    labels: Object.keys(generalStats.toneRatios),
+                    data: Object.values(generalStats.toneRatios),
+                  }}
+                />
+              </div>
+              <div className="history-chart">
+                <Chart
+                  chartData={{
+                    title: "Duygu Oranları (%)",
+                    labels: Object.keys(generalStats.sentimentRatios),
+                    data: Object.values(generalStats.sentimentRatios),
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       <div className="card-wrapper">
         {texts.length !== 0 ? (
           texts.map((text) => (
