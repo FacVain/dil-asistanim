@@ -1,6 +1,6 @@
 export const askGPT = (userInput) => {
   let response;
-  fetch("http://localhost:1453/api/query", {
+  fetch(import.meta.env.VITE_API_URL + "/api/query", {
     method: "POST",
     credentials: "include",
     headers: {

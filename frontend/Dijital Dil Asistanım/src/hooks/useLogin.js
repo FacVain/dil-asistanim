@@ -17,6 +17,8 @@ const useLogin = () => {
         .post(`${import.meta.env.VITE_API_URL}/auth/login`, {
           username,
           password,
+        }, {
+          withCredentials: true
         })
         .then((response) => {
           console.log(response);

@@ -19,9 +19,10 @@ console.log(process.env.NODE_ENV);
 const app = express();
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, './dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: process.env.COOKIE_SECRET, // ToDo güzel bir secret seçelim!!
+  secret: process.env.COOKIE_SECRET, 
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false , maxAge: 24 * 60 * 60 * 1000 } // true if https !!
@@ -42,6 +43,10 @@ app.use(
 app.use("/auth", authRoute);
 app.use("/history", historyRoute);
 app.use("/api", apiRoute);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './dist', 'index.html'));
+});
 
 const port = process.env.PORT || 3000;
 
