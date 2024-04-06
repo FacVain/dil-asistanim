@@ -11,6 +11,7 @@ import {
 import { Checkbox } from "../../components/CheckBox";
 import ToneQuestionPopup from "../../components/ToneQuestionPopup";
 import SuggestionComponent from "../../components/SuggestionComponent";
+import PopupForm from "../../components/PopupForm";
 
 const Dashboard = () => {
   const [checkedType, setCheckedType] = useState("");
@@ -20,6 +21,8 @@ const Dashboard = () => {
   const [gptResponse, setGptResponse] = useState("");
   const [toneForFreeText, setToneForFreeText] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [formAnswer, setFormAnswer] = useState({});
 
   const boxRef = useRef(null);
 
@@ -29,6 +32,8 @@ const Dashboard = () => {
     setCheckedType(checkedType === e.target.id ? "" : e.target.id);
     if (e.target.id === "Serbest Metin") {
       checkedType === e.target.id ? null : setIsPopupOpen(true);
+    } else {
+      setIsFormOpen(true);
     }
   };
 
@@ -43,6 +48,12 @@ const Dashboard = () => {
     setToneForFreeText(tone);
   };
 
+  const handleFormConfirm = (info) => {
+    console.log(info);
+    setIsFormOpen(false);
+    setFormAnswer(info);
+  };
+
   useLayoutEffect(() => {
     setSize(() => ({
       width: boxRef.current.offsetWidth,
@@ -53,7 +64,7 @@ const Dashboard = () => {
   const sendWriting = async () => {
     setIsLoading(true);
     const queryObject = await checkTone();
-    console.log(queryObject);
+    console.log(queryObject.userInput);
 
     await fetch(import.meta.env.VITE_API_URL + "/api/query", {
       method: "POST",
@@ -73,7 +84,16 @@ const Dashboard = () => {
 
   const checkTone = async () => {
     const queryObject = textObjectStructureForQuery[checkedType];
-    queryObject.userInput = userInput;
+    queryObject.userInput =
+      userInput +
+      " " +
+      formAnswer.name +
+      " " +
+      formAnswer.surname +
+      " " +
+      formAnswer.address +
+      " " +
+      formAnswer.date;
 
     "tone" in queryObject
       ? toneForFreeText
@@ -117,6 +137,7 @@ const Dashboard = () => {
           <LoadingBox width={size.width + "px"} height={size.height + "px"} />
         )}
         {isPopupOpen && <ToneQuestionPopup sendTone={handleSelectTone} />}
+        {isFormOpen && <PopupForm onClose={handleFormConfirm} />}
         {gptResponse && (
           <SuggestionComponent suggestion={gptResponse.gptResponse} />
         )}

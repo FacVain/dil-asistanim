@@ -2,8 +2,6 @@ import PdfComponent from "./PdfComponent";
 import "./components.css";
 
 const SuggestionComponent = ({ suggestion }) => {
-  console.log(suggestion);
-
   if (!suggestion) {
     return (
       <div className="suggestion-container">
@@ -18,7 +16,7 @@ const SuggestionComponent = ({ suggestion }) => {
       ? suggestion.improvedMailFromUserText
       : suggestion.improvedPetitionFromUserText;
 
-  console.log("suggestion", suggestion);
+  console.log(textToDisplay);
 
   return (
     <div className="suggestion-container">
@@ -26,7 +24,7 @@ const SuggestionComponent = ({ suggestion }) => {
         <h3>
           <strong>Yapay Zeka ile Düzeltilmiş Hali:</strong>
         </h3>
-        <p>{textToDisplay}</p>
+        <p style={{ wordWrap: "break-word" }}>{textToDisplay}</p>
       </div>
       <div className="suggestion-content">
         <h3>

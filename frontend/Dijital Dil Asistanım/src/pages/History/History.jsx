@@ -1,4 +1,5 @@
 import "./history.css";
+import "../../components/components.css";
 
 // @hooks
 import Card from "../../components/Card";
@@ -6,7 +7,11 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 
 import axios from "axios";
-import { textTypes, textTypesEnum } from "../../assets/textTypes";
+import {
+  textTypes,
+  textTypesEnum,
+  textObjectStructureForQuery,
+} from "../../assets/textTypes";
 import { Checkbox } from "../../components/CheckBox";
 import { useState } from "react";
 import LoadingBox from "../../components/LoadingBox";
@@ -21,6 +26,8 @@ const History = () => {
   const [checkedType, setCheckedType] = useState("");
   const [isTextFound, setIsTextFound] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingStat, setIsLoadingStat] = useState(false);
+  const [result, setResult] = useState("");
 
   const handleSaveHistory = (texts, generalStats) => {
     dispatch({
@@ -36,14 +43,37 @@ const History = () => {
     e.stopPropagation();
     if (checkedType === "") {
       setCheckedType(checkedType === e.target.id ? "" : e.target.id);
+      setResult("");
     } else if (checkedType !== e.target.id) {
       dispatch({ type: "CLEAR_HISTORY" });
       setCheckedType(e.target.id);
+      setResult("");
     }
   };
 
   const selectWritingHandler = (id) => {
     navigate(`/history/${id}`);
+  };
+
+  const getResultFromStatistics = async () => {
+    setIsLoadingStat(true);
+    await fetch(import.meta.env.VITE_API_URL + "/api/history", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: textObjectStructureForQuery[checkedType].type,
+        mailType: textObjectStructureForQuery[checkedType].mailType,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.gptResponse);
+        setResult(data.gptResponse);
+        setIsLoadingStat(false);
+      });
   };
 
   const getHistory = async () => {
@@ -108,6 +138,31 @@ const History = () => {
                     data: Object.values(generalStats.sentimentRatios),
                   }}
                 />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  height: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {result || isLoadingStat ? (
+                  isLoadingStat ? (
+                    <>
+                      <p style={{ marginBottom: "60px" }}>
+                        İstatistikler Yükleniyor
+                      </p>
+                      <LoadingBox height="10vh" width="10vw" />
+                    </>
+                  ) : (
+                    <div className="history-stat-text">{result}</div>
+                  )
+                ) : (
+                  <button onClick={getResultFromStatistics} className="button">
+                    İstatistiklerden Çıkarım Yap
+                  </button>
+                )}
               </div>
             </div>
           </div>
