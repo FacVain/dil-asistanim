@@ -1,3 +1,4 @@
+import PdfComponent from "./PdfComponent";
 import "./components.css";
 
 const SuggestionComponent = ({ suggestion }) => {
@@ -58,6 +59,12 @@ const SuggestionComponent = ({ suggestion }) => {
         {suggestion.createdAt && (
           <p className="date">{suggestion.createdAt.substring(0, 10)}</p>
         )}
+      </div>
+      <div style={{ backgroundColor: "white" }}>
+        <PdfComponent
+          text={suggestion.improvedPetitionFromUserText}
+          fileName={suggestion.type}
+        />
       </div>
     </div>
   );
