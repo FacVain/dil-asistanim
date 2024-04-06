@@ -145,7 +145,7 @@ const Dashboard = () => {
       <Button
         onClick={sendWriting}
         type={"primary"}
-        name={gptResponse ? "Edit" : "Gönder"}
+        name={gptResponse ? "Yeniden Gönder" : "Gönder"}
       />
     </div>
   );

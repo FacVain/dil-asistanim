@@ -19,7 +19,7 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     flexDirection: "row",
-    backgroundColor: "#E4E4E4",
+    backgroundColor: "#FFF",
     fontFamily: "Roboto",
   },
   section: {
