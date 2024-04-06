@@ -126,6 +126,13 @@
   width: 100%;
 }
 
+.pdf-button {
+  transition: all 0.1s ease;
+
+  &:hover {
+  }
+}
+
 .sidebar-button-active {
   background-color: var(--secondary-color);
   color: #fff;
@@ -239,7 +246,7 @@
   cursor: pointer;
 }
 
-.navbar{
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -249,7 +256,7 @@
   border-radius: var(--small-border-radius);
 }
 
-.navbar-title{
+.navbar-title {
   background-color: var(--secondary-color);
   color: var(--quaternary-color);
   height: 100%;
@@ -261,7 +268,7 @@
   font-weight: var(--bold-font-weight);
 }
 
-.navbar-item{
+.navbar-item {
   font-size: var(--medium-font-size);
   font-weight: var(--regular-font-weight);
   color: var(--quaternary-color);
@@ -271,12 +278,12 @@
   height: 100%;
   padding: var(--medium-padding);
 
-  &:hover{
+  &:hover {
     background-color: var(--secondary-color);
   }
 }
 
-.navbar-item-active{
+.navbar-item-active {
   background-color: var(--secondary-color);
 }
 
@@ -289,7 +296,7 @@
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  gap:var(--small-gap);
+  gap: var(--small-gap);
   border: 2px solid var(--secondary-color);
   border-radius: 10px;
   padding: var(--medium-padding);
@@ -303,14 +310,14 @@
 .suggestion-content {
   display: flex;
   flex-direction: column;
-  gap:var(--medium-gap);
+  gap: var(--medium-gap);
   border: 2px solid var(--secondary-color);
   border-radius: 10px;
   padding: var(--medium-padding);
   width: 100%;
 }
 
-.suggestion-content .date{
+.suggestion-content .date {
   font-size: var(--medium-font-size);
   color: var(--quaternary-color);
   margin-left: auto;
