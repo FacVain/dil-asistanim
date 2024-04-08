@@ -1,0 +1,52 @@
+{
+    "messages": [
+      {
+        "role": "user",
+        "content": "KARAYOLLARI GENEL MÜDÜRLÜĞÜ\n Merhaba, Yolda otomobil kazası oldu. Ardahan'dan Şavşat istikametine doğru yol alan İsamettin Demir yönetimindeki otomobil anılan yolun Sahara mevkiinde kontrolden çıkarak uçuruma yuvarlanmıştır. Kazada İsamettin Demir, Sultan Demir, Şenay Demir ve Kuzey Demir vefat ettiler. Bu yüzden şu yola bariyerler koymanız gerekiyor. Teşekkürler, Sertaç Yıldıran"
+      },
+      {
+        "role": "assistant",
+        "function_call": {
+          "name": "fill_json",
+          "arguments": "{\"sentimentAnalysis\": \"Negatif\", \"toneAnalysis\": [\"Üzgün\", \"Kızgın\", \"Endişeli\"], \"improvedPetitionFromUserText\": \"KARAYOLLARI GENEL MÜDÜRLÜĞÜ\nSayın yetkili, 16 Temmuz Pazar günü Ardahan'dan Şavşat istikametine doğru yol   alan İsamettin Demir yönetimindeki otomobil anılan yolun Sahara mevkiinde kontrolden çıkarak uçuruma yuvarlanmıştır. Kazada İsamettin Demir, Sultan Demir, Şenay Demir ve Kuzey Demir vefat etmişlerdir. Her yıl bu ve benzerini yaşadığımız bu elim kazaların tekrar yaşanmaması için Ardahan-Şavşat yolunun öncelikle tehlikeli virajların bulunduğu yerler olmak üzere bariyersiz yerlerin bariyerlendirme çalışmasının yapılmasını vatandaşlık görevi olarak talep ediyorum. Gereğininin yapılmasını arz ederim.\nSertaç Yıldıran\n[Tarih]\n[Adres]\", \"suggestionForUserText\": \"Yazınızın ton analizi, üzgün ve endişeli olduğunuzu ortaya koyuyor. Daha etkili bir dile sahip olmak için yazınızda daha resmi bir dil kullanmanızı öneririm. Ayrıca, gereksiz bilgilere girmeden konuyu net bir şekilde ifade etmeniz yazınızın etkisini artıracaktır.\"}"
+        }
+      }
+    ],
+    "functions": [
+      {
+        "name": "fill_json",
+        "description": "Fill given fields using user text.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sentimentAnalysis": {
+              "type": "string",
+              "enum": ["Pozitif","Negatif","Nötr"],
+              "description": "Sentiment analysis of input text"
+            },
+            "toneAnalysis": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["Kızgın","Korku","Mutlu","Sürpriz","Üzgün","Resmi","Gayri Resmi","İyimser","Endişeli","Samimi","Meraklı","İddialı","Teşvik Edici","İşbirliği"]
+              },
+              "minItems": 3,
+              "maxItems": 3,
+              "description": "Tone analysis of input text. Return top 3 tones."
+            },
+            "improvedPetitionFromUserText": {
+              "type": "string",
+              "description": "Write An improved petition using input text by changing its language to a more formal one and changing negative and poorly written sentences.\nCorrect user grammar errors. You should also improve the clarity and professionalism of the petition. Your petition should include \"Gereğini arz ederim\" phrase,Name of the Authority Applied to, Name of the Petitioner, Date and Address of the petitioner."
+            },
+            "suggestionForUserText": {
+              "type": "string",
+              "description": "Detailed suggestions to user on how to write better petitions by analysing input text. Add evaluation of the tone analysis to your suggestions."
+            }
+          },
+          "required": ["sentimentAnalysis","toneAnalysis","improvedPetitionFromUserText","suggestionForUserText"],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        }
+      }
+    ]
+  }
