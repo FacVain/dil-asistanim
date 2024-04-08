@@ -6,6 +6,7 @@ import LoadingBox from "../../components/LoadingBox";
 import {
   textObjectStructureForQuery,
   textTypes,
+  textTypesEnum,
   toneEnums,
 } from "../../assets/textTypes";
 import { Checkbox } from "../../components/CheckBox";
@@ -86,14 +87,12 @@ const Dashboard = () => {
     const queryObject = textObjectStructureForQuery[checkedType];
     queryObject.userInput =
       userInput +
-      " " +
-      formAnswer.name +
-      " " +
-      formAnswer.surname +
-      " " +
-      formAnswer.address +
-      " " +
-      formAnswer.date;
+      (formAnswer.name ? "\nAd: " + formAnswer.name : "") +
+      (formAnswer.surname ? "\nSoyad: " + formAnswer.surname : "") +
+      (formAnswer.address ? "\nAdres: " + formAnswer.address : "") +
+      (formAnswer.date ? "\nTarih: " + formAnswer.date : "") +
+      (formAnswer.mail ? "\nE-Mail Adresi: " + formAnswer.mail : "") +
+      (formAnswer.tel ? "\nTelefon Numarası: " + formAnswer.tel : "");
 
     "tone" in queryObject
       ? toneForFreeText
@@ -137,7 +136,7 @@ const Dashboard = () => {
           <LoadingBox width={size.width + "px"} height={size.height + "px"} />
         )}
         {isPopupOpen && <ToneQuestionPopup sendTone={handleSelectTone} />}
-        {isFormOpen && <PopupForm onClose={handleFormConfirm} />}
+        {isFormOpen && <PopupForm onClose={handleFormConfirm} type={textTypesEnum[checkedType]} />}
         {gptResponse && (
           <SuggestionComponent suggestion={gptResponse.gptResponse} />
         )}

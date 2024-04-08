@@ -2,7 +2,7 @@
 import { useState } from "react";
 import "./PopupForm.css";
 
-const PopupForm = ({ onClose }) => {
+const PopupForm = ({ onClose, type }) => {
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -55,7 +55,7 @@ const PopupForm = ({ onClose }) => {
               required
             />
           </div>
-          <div className="form-group">
+          {type == "petitions" && <div className="form-group">
             <label htmlFor="address">Adres:</label>
             <input
               type="text"
@@ -65,8 +65,30 @@ const PopupForm = ({ onClose }) => {
               onChange={handleChange}
               required
             />
-          </div>
-          <div className="form-group">
+          </div>}
+          {type.includes("mails") && <div className="form-group">
+            <label htmlFor="tel">Telefon Numarası:</label>
+            <input
+              type="tel"
+              id="tel"
+              name="tel"
+              value={formData.tel}
+              onChange={handleChange}
+              required
+            />
+          </div>}
+          {type.includes("mails") && <div className="form-group">
+            <label htmlFor="email">E-Mail:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.mail}
+              onChange={handleChange}
+              required
+            />
+          </div>}
+           <div className="form-group">
             <label htmlFor="date">Tarih:</label>
             <input
               type="date"
