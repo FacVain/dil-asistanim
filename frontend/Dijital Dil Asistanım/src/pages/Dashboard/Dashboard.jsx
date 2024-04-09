@@ -13,6 +13,7 @@ import { Checkbox } from "../../components/CheckBox";
 import ToneQuestionPopup from "../../components/ToneQuestionPopup";
 import SuggestionComponent from "../../components/SuggestionComponent";
 import PopupForm from "../../components/PopupForm";
+import BertComponent from "../../components/BertComponent";
 
 const Dashboard = () => {
   const [checkedType, setCheckedType] = useState("");
@@ -139,6 +140,9 @@ const Dashboard = () => {
         {isFormOpen && <PopupForm onClose={handleFormConfirm} type={textTypesEnum[checkedType]} />}
         {gptResponse && (
           <SuggestionComponent suggestion={gptResponse.gptResponse} />
+        )}
+        {gptResponse && (
+          <BertComponent bertanalysis={gptResponse.robertaResponse} />
         )}
       </div>
       <Button

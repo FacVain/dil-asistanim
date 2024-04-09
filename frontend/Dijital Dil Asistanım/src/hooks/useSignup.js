@@ -1,11 +1,13 @@
 import { useState } from "react";
 import useAuthContext from "./useAuthContext";
 import axios from "axios";
+import useLogin from "./useLogin";
 
 const useSignup = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const { login } = useLogin();
   const { dispatch } = useAuthContext();
 
   const signup = async ({ username, password }) => {
@@ -19,7 +21,7 @@ const useSignup = () => {
         })
         .then((response) => {
           console.log(response);
-          dispatch({ type: "LOGIN", payload: response.data });
+          login({ username, password });
           return response.data;
         })
         .catch((err) => {
