@@ -27,7 +27,7 @@ def predict():
     sent_scores = sentiment[0][0].detach().numpy()
     sent_scores = softmax(sent_scores).tolist()
     sent_score = sent_scores.index(max(sent_scores))
-    sentiment = ["Pozitif", "Nötr", "Negatif"][sent_score]
+    sentiment = ["Negatif", "Nötr", "Pozitif"][sent_score]
 
 
     tone = tone_model(**encoded_input)

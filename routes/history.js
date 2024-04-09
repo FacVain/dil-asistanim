@@ -9,10 +9,18 @@ const PetitionAnalysis = require('../models/Dilekce');
 const FreeTextAnalysis = require('../models/SerbestYazi');
 
 
-router.get('/mails', isLoggedIn, async (req, res, next) => {
-    console.log(req.body.mailType);
+router.get('/academicmails', isLoggedIn, async (req, res, next) => {
     try {
-        const response = await fetchUserHistoryAndStats(MailAnalysis, req.session.passport.user.id, req.body.mailType);
+        const response = await fetchUserHistoryAndStats(MailAnalysis, req.session.passport.user.id, "academic");
+        res.json(response);
+    } catch (error) {
+        next(error); // Pass errors to the error handler middleware
+    }
+});
+
+router.get('/businessmails', isLoggedIn, async (req, res, next) => {
+    try {
+        const response = await fetchUserHistoryAndStats(MailAnalysis, req.session.passport.user.id, "business");
         res.json(response);
     } catch (error) {
         next(error); // Pass errors to the error handler middleware

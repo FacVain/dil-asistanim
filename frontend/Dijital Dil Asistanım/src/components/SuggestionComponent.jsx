@@ -1,8 +1,7 @@
+import PdfComponent from "./PdfComponent";
 import "./components.css";
 
 const SuggestionComponent = ({ suggestion }) => {
-  console.log(suggestion);
-
   if (!suggestion) {
     return (
       <div className="suggestion-container">
@@ -11,13 +10,21 @@ const SuggestionComponent = ({ suggestion }) => {
     );
   }
 
+  const textToDisplay = suggestion.rewrittenTextFromUserText
+    ? suggestion.rewrittenTextFromUserText
+    : suggestion.improvedMailFromUserText
+      ? suggestion.improvedMailFromUserText
+      : suggestion.improvedPetitionFromUserText;
+
+  console.log(textToDisplay);
+
   return (
     <div className="suggestion-container">
       <div className="suggestion-text">
         <h3>
           <strong>Yapay Zeka ile Düzeltilmiş Hali:</strong>
         </h3>
-        <p>{suggestion.improvedPetitionFromUserText}</p>
+        <p style={{ wordWrap: "break-word" }}>{textToDisplay}</p>
       </div>
       <div className="suggestion-content">
         <h3>
@@ -58,6 +65,9 @@ const SuggestionComponent = ({ suggestion }) => {
         {suggestion.createdAt && (
           <p className="date">{suggestion.createdAt.substring(0, 10)}</p>
         )}
+      </div>
+      <div style={{ backgroundColor: "white" }}>
+        <PdfComponent text={textToDisplay} fileName={suggestion.type} />
       </div>
     </div>
   );

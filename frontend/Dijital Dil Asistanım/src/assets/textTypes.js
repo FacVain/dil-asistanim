@@ -8,8 +8,8 @@ export const textTypes = [
 export const textTypesEnum = {
   "Serbest Metin": "freetexts",
   Dilekçe: "petitions",
-  "E-Posta (İş)": "mails",
-  "E-Posta (Akademik)": "mails",
+  "E-Posta (İş)": "businessmails",
+  "E-Posta (Akademik)": "academicmails",
 };
 
 export const textObjectStructureForQuery = {
