@@ -16,7 +16,6 @@ const Home = () => {
   const [GPTOutput, setGPTOutput] = useState("");
 
   const logoutHandler = () => {
-    console.log("wtf???");
 
     Modal.confirm({
       title: "Are you sure you want to log out?",

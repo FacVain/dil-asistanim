@@ -18,6 +18,7 @@ console.log(process.env.NODE_ENV);
 
 const app = express();
 app.use(express.json());
+app.enable("trust proxy");
 
 app.use(express.static(path.join(__dirname, './dist')));
 app.use(express.static(path.join(__dirname, 'public')));
